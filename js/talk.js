@@ -48,7 +48,7 @@ const TALKS=[
     {vi:"Dạ, con chào cô, con về ạ.",en:"Goodbye, I'm heading home now.",q:"best",note:"Con chào cô, con về is how you say goodbye to someone older."},
     {vi:"Tạm biệt cô.",en:"Goodbye.",q:"ok",note:"Correct, a bit formal. Families usually say con chào cô."},
     {vi:"Bye cô!",en:"Bye!",q:"ok",note:"Common with young people, but add dạ and ạ for parents."}]}]},
- {id:"t3",title:"Chúc Tết Ông nội",vi:"Chúc Tết ông nội",who:"Ông nội",kind:"ong",
+ {id:"t3",title:"New Year with Grandpa",vi:"Chúc Tết ông nội",who:"Ông nội",kind:"ong",
   intro:"It's Tết. You visit Grandpa to give New Year wishes. With grandparents you can call yourself cháu or con.",
   steps:[
    {npc:["Ồ, cháu tới rồi!","Oh, you're here!"],choices:[

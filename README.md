@@ -12,6 +12,8 @@ Made by Audrey Pham, Communication Sciences and Disorders, California State Univ
   <img src="screenshots/story.png" width="200" alt="A story with tap-to-translate words and a comprehension question">
   <img src="screenshots/family.png" width="200" alt="Interactive family tree for Vietnamese pronouns">
   <img src="screenshots/telex.png" width="200" alt="Telex typing practice turning vieetj into việt">
+  <img src="screenshots/talk.png" width="200" alt="Talk to family: Bà ngoại reacts when the learner calls her bạn">
+  <img src="screenshots/practice.png" width="200" alt="Practice tab with a review banner and grouped practice tools">
 </p>
 
 ## Why I built this

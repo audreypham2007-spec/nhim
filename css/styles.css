@@ -390,6 +390,7 @@ td.big{font-size:1.35rem;font-weight:700;font-family:var(--display)}
 
 .toast{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:60;background:var(--ink);color:var(--page);padding:10px 16px;border-radius:14px;font-weight:700;display:flex;gap:10px;align-items:center;animation:rise .25s;max-width:calc(100% - 32px)}
 body:has(.lesson) .toast{top:auto;bottom:calc(150px + env(safe-area-inset-bottom,0px))}
+.c-learn{color:var(--leaf)}
 .toast svg{width:22px;height:22px;color:var(--gold)}
 
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}

@@ -40,7 +40,7 @@ I study speech-language pathology, and I care about bilingual speakers. Many Vie
 - A number trainer for 0 to 999 that covers mốt, lăm, tư, and linh or lẻ.
 
 **Motivation**
-- XP, daily goal, day streak, and hearts that refill over time.
+- XP, daily goal, and day streak. No hearts: mistakes never lock you out, they come back at the end of the lesson until you get them right.
 - Three daily quests and 13 badges.
 - Sound effects, confetti, and a mascot that reacts to right and wrong answers.
 

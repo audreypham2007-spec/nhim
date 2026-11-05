@@ -37,11 +37,7 @@ function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 function applyTheme(){const t=S.set.theme;if(t==="auto")document.documentElement.removeAttribute("data-theme");else document.documentElement.dataset.theme=t;
  const m=$('meta[name="theme-color"]');if(m)m.content=getComputedStyle(document.documentElement).getPropertyValue("--page").trim()||"#EDF2EA"}
 
-const HEART_MS=3*HOUR;
-function regen(){if(S.hearts>=5){S.heartTs=Date.now();return}const n=Math.floor((Date.now()-S.heartTs)/HEART_MS);if(n>0){S.hearts=Math.min(5,S.hearts+n);S.heartTs+=n*HEART_MS;if(S.hearts>=5)S.heartTs=Date.now()}}
-function nextHeartIn(){return Math.max(0,HEART_MS-(Date.now()-S.heartTs))}
-function loseHeart(){if(S.hearts>=5)S.heartTs=Date.now();S.hearts=Math.max(0,S.hearts-1)}
-function dailyRefresh(){regen();if(S.last&&dayDiff(S.last,today())>1)S.streak=0;ensureQuests();save()}
+function dailyRefresh(){if(S.last&&dayDiff(S.last,today())>1)S.streak=0;ensureQuests();save()}
 function addXp(n){S.xp+=n;const t=today();S.daily[t]=(S.daily[t]||0)+n;let extended=false;
  if(S.last!==t){S.streak=(S.last&&dayDiff(S.last,t)===1)?S.streak+1:1;S.last=t;S.best=Math.max(S.best,S.streak);extended=true}
  questProg("xp",S.daily[t],true);save();return extended}
@@ -202,14 +198,14 @@ function shell(){
  $("#brandTop").innerHTML=mascot()+"Nhím";
  $$("[data-tab]").forEach(b=>b.onclick=()=>{if(!L)setTab(b.dataset.tab)});
  $$(".brand").forEach(b=>b.onclick=e=>{e.preventDefault();setTab("learn")});
- $("#stStreak").onclick=()=>streakSheet();$("#stHearts").onclick=()=>heartSheet();$("#stXp").onclick=()=>setTab("profile");
+ $("#stStreak").onclick=()=>streakSheet();$("#stHearts").onclick=()=>setTab("practice");$("#stXp").onclick=()=>setTab("profile");
 }
 function setTab(t){tab=t;$$("[data-tab]").forEach(b=>b.setAttribute("aria-current",b.dataset.tab===t?"page":"false"));render();scrollTo(0,0)}
 function topStats(){const lit=S.last===today();
  $("#stStreak").className="stat c-streak"+(lit?"":" cold");$("#stStreak").innerHTML=I.flame+`<span>${S.streak}</span>`;$("#stStreak").setAttribute("aria-label",`${S.streak} day streak`);
  $("#stXp").innerHTML=I.bolt+`<span>${S.xp}</span>`;$("#stXp").setAttribute("aria-label",`${S.xp} XP`);
- $("#stHearts").innerHTML=I.heart+`<span>${S.hearts}</span>`;$("#stHearts").setAttribute("aria-label",`${S.hearts} hearts`)}
-function render(){regen();topStats();renderAside();const v=$("#view");
+ $("#stHearts").innerHTML=I.leaf+`<span>${learnedCount()}</span>`;$("#stHearts").setAttribute("aria-label",`${learnedCount()} ${learnedCount()===1?"word":"words"} learned`)}
+function render(){topStats();renderAside();const v=$("#view");
  ({learn:renderLearn,practice:renderPractice,stories:renderStories,guide:renderGuide,profile:renderProfile})[tab](v);bindSay(v)}
 
 /* ----- right column (wide screens) ----- */
@@ -265,7 +261,7 @@ function openNode(key){const [u,k]=key.split(":");const ui=+u,kk=k==="s"?"s":+k;
  sheet(`<div class="row" style="align-items:flex-start"><div style="flex:1"><p class="muted small">${ui===-1?"The six tones":"Unit "+(ui+1)+": "+esc(UNITS[ui].title)}</p><h2>${esc(l.name)}</h2></div>${l.check?`<span style="color:var(--gold);width:40px">${I.chest}</span>`:""}</div>
  <p class="muted">${l.check?"A mixed test of the whole unit. No new words. Pass it to finish the unit.":done?"You finished this. Replay it for practice XP.":lessonBlurb(ui,kk)}</p>
  <button class="btn ${l.check?"gold":""}" id="goLesson">${done?"Practice again":"Start"}${done?"":` +${l.check?20:10} XP`}</button><button class="btn ghost" data-close>Not now</button>`,()=>{
-  $("#goLesson").onclick=()=>{closeSheet();if(S.hearts<=0&&!done)return heartSheet(true);startLesson(ui,kk)}})}
+  $("#goLesson").onclick=()=>{closeSheet();startLesson(ui,kk)}})}
 function lessonBlurb(ui,k){if(ui===-1)return k===0?"Hear each tone and see its pitch shape.":"Match words to the shape of their pitch.";
  const w=unitWords(ui),half=Math.ceil(w.length/2);
  if(k===0)return "New words: "+w.slice(0,half).map(disp).join(", ")+".";if(k===1)return "New words: "+w.slice(half).map(disp).join(", ")+".";
@@ -282,7 +278,7 @@ function tipSheet(ui){
 function renderPractice(v){
  const due=dueItems().length,miss=Object.keys(S.miss).length,ts=Object.values(S.tstat).reduce((a,t)=>[a[0]+t.r,a[1]+t.r+t.w],[0,0]);
  const weak=Object.entries(S.srs).sort((a,b)=>a[1].s-b[1].s).slice(0,24).map(([vi,r])=>({it:WORD_BY_VI.get(norm(vi)),r})).filter(x=>x.it);
- v.innerHTML=`<header><h1 style="font-size:2rem">Practice</h1><p class="muted">Practice never costs hearts. Finishing a session gives one back.</p></header>
+ v.innerHTML=`<header><h1 style="font-size:2rem">Practice</h1><p class="muted">Short sessions that keep your words fresh. Mistakes never lock you out. They just come back until you get them.</p></header>
  <div class="hub">
   <button class="hubcard wide" data-p="review" style="--hc:var(--leaf)"><span class="ic">${I.brain}</span><span style="flex:1"><h3>Smart review</h3><p>Words come back right before you'd forget them.</p></span><span class="count">${due?due+" due":"All fresh"}</span></button>
   <button class="hubcard" data-p="mistakes" style="--hc:var(--lotus)"><span class="ic">${I.redo}</span><h3>Mistakes</h3><p>Every word you missed, until you get it right twice.</p><span class="count">${miss} ${miss===1?"word":"words"}</span></button>
@@ -411,7 +407,7 @@ function startLesson(u,k,qs){
  L={u,k,q,i:0,practice,check:!practice&&lessonsOf(u).find(l=>l.k===k)?.check,total:q.filter(x=>x.type!=="intro"&&x.type!=="tone-intro").length,answered:0,right:0,wrong:0,combo:0,best:0,start:Date.now(),tonesRight:0};
  $("#layer").innerHTML=`<div class="lesson" role="dialog" aria-label="Lesson"><div class="in">
  <div class="lhead"><button class="xbtn" id="quit" aria-label="Quit lesson">${I.x}</button><div class="pbar" id="pbarw"><i id="pbar" style="width:0%"></i><span class="combo" id="combo"></span></div>
- <span class="stat c-heart">${I.heart}<span id="lh">${practice?"∞":S.hearts}</span></span></div>
+ <span class="stat c-learn" title="Words learned">${I.leaf}<span>${learnedCount()}</span></span></div>
  <div class="lbody" id="lbody" aria-live="polite"></div></div>
  <div class="lfoot" id="lfoot"><div class="in2" id="lfootIn"></div></div></div>`;
  $("#quit").onclick=()=>sheet(`<div class="row" style="justify-content:center">${mascot("sad").replace('class="m "','style="width:110px;height:110px" class="m "')}</div><h2 style="text-align:center">Wait, don't go!</h2><p style="text-align:center">You'll lose your progress in this lesson.</p><button class="btn" data-close>Keep learning</button><button class="btn ghost" id="doQuit" style="color:var(--bad)">End lesson</button>`,()=>{$("#doQuit").onclick=()=>{closeSheet();endLesson()}});
@@ -501,22 +497,21 @@ function grade(ok,ans,q,sel){L.answered++;const b=$("#lbody");
   const extra=q.slip?`<p>Watch the marks: <b>${esc(q.ans)}</b></p>`:q.type==="type"&&q.alts&&q.alts.length>1?`<p class="mean">Also right: ${esc(q.alts.filter(a=>norm(a)!==norm(q.ans)).join(", "))}</p>`:q.it&&q.it.en&&q.type!=="match"&&!q.it.tonal&&q.type!=="mc"?`<p class="mean">${esc(disp(q.it))} = ${esc(q.it.en)}</p>`:"";
   footer(`<div class="fb"><span class="badge">${I.check}</span><div><h3>${praise}</h3>${extra}</div></div><button class="btn" id="cont">Continue</button>`,"ok")}
  else{L.wrong++;L.combo=0;if(q.it&&!q.it.tonal)srsHit(q.it,false);
-  if(!L.practice&&!L.story){loseHeart();$("#lh").textContent=S.hearts}
   fx("bad");if(m){m.outerHTML=mascot("sad","m-droop")}
-  L.q.push({...q,slip:false});L.total++;
-  footer(`<div class="fb"><span class="badge">${I.x}</span><div><h3>Not quite</h3>${ans?`<p>Correct answer: <b>${esc(ans)}</b></p>`:""}${q.it&&q.it.en&&!q.it.tonal&&ans!==q.it.en&&q.show!==q.it.en&&q.type!=="bank"?`<p class="mean">${esc(q.it.en)}</p>`:""}</div></div><button class="btn bad" id="cont">Got it</button>`,"bad")}
+  if(!q.again){L.q.push({...q,slip:false,again:true});L.total++}
+  footer(`<div class="fb"><span class="badge">${I.x}</span><div><h3>Not quite</h3>${!q.again?`<p class="small">It'll come back at the end.</p>`:""}${ans?`<p>Correct answer: <b>${esc(ans)}</b></p>`:""}${q.it&&q.it.en&&!q.it.tonal&&ans!==q.it.en&&q.show!==q.it.en&&q.type!=="bank"?`<p class="mean">${esc(q.it.en)}</p>`:""}</div></div><button class="btn bad" id="cont">Got it</button>`,"bad")}
  save();progress();
  if(q.it&&q.it.vi&&!q.num&&q.type!=="match")setTimeout(()=>say(q.type==="bank"&&q.audio?q.audio:disp(q.it.vi?q.it:{vi:q.it.vi})),150);
- $("#cont").onclick=()=>{L.i++;if(!L.practice&&!L.story&&S.hearts<=0)return outOfHearts();showQ()};$("#cont").focus()}
+ $("#cont").onclick=()=>{L.i++;showQ()};$("#cont").focus()}
 function finish(){const acc=Math.round(L.right/Math.max(1,L.right+L.wrong)*100),secs=Math.round((Date.now()-L.start)/1000),perfect=L.wrong===0&&L.right>0;
  let xp=L.practice?10:L.check?20:10;if(perfect&&!L.practice)xp+=L.check?10:5;
  const firstTime=!L.practice&&!S.done[L.u+":"+L.k];
  if(!L.practice){S.done[L.u+":"+L.k]=1;S.cnt.lessons++;questProg("lessons",1);if(perfect){S.cnt.perfect++;questProg("perfect",1)}}
- else{S.hearts=Math.min(5,S.hearts+1);questProg("practice",1)}
+ else questProg("practice",1);
  const extended=addXp(xp);const badges=checkBadges();save();
  fx("done");confetti();
  const title=L.check&&firstTime?"Unit complete!":perfect?"Perfect lesson!":L.practice?"Practice done!":"Lesson complete!";
- const unl=[];if(L.practice)unl.push(`<div class="unlock" style="color:var(--lotus)">${I.heart}<span style="color:var(--ink)">One heart refilled</span></div>`);
+ const unl=[];
  badges.forEach(b=>unl.push(`<div class="unlock" style="color:${b.c}">${I[b.ic]}<span style="color:var(--ink)">New badge: <b>${esc(b.name)}</b></span></div>`));
  if(L.check&&firstTime&&L.u+1<UNITS.length)unl.push(`<div class="unlock" style="color:var(--leaf)">${I.star}<span style="color:var(--ink)">Unit ${L.u+2} unlocked: <b>${esc(UNITS[L.u+1].title)}</b></span></div>`);
  if(L.u===-1&&L.k===2&&firstTime)unl.push(`<div class="unlock" style="color:var(--leaf)">${I.star}<span style="color:var(--ink)">Unit 1 unlocked: <b>${esc(UNITS[0].title)}</b></span></div>`);
@@ -529,11 +524,6 @@ function countUp(el,n){if(!el)return;const t0=performance.now();(function f(t){c
 function streakScreen(){fx("combo");$("#lbody").innerHTML=`<div class="result"><div class="flame-big pop">${I.flame.replace("<svg",'<svg style="width:100%;height:100%"')}</div><div class="streaknum">${S.streak}</div><h2 style="color:var(--ink)">day streak!</h2><p class="muted">${S.streak===1?"Day one. Come back tomorrow to keep the flame going.":`You've practiced ${S.streak} days in a row. Học mỗi ngày!`}</p><div class="widget" style="width:100%">${weekDots()}</div></div>`;
  footer(`<button class="btn gold" id="cont">Continue</button>`);$("#cont").onclick=()=>endLesson();$("#cont").focus()}
 function endLesson(){$$(".gloss-pop").forEach(x=>x.remove());L=null;$("#layer").innerHTML="";document.body.style.overflow="";render()}
-function outOfHearts(){const t=nextHeartIn(),hrs=Math.floor(t/HOUR),mins=Math.ceil((t%HOUR)/MIN);
- $("#lbody").innerHTML=`<div class="result">${mascot("sleep")}<h2 style="color:var(--ink)">Out of hearts</h2><p class="muted">Nhím needs a nap. Your next heart comes back in ${hrs?hrs+" h ":""}${mins} min. Or earn one now with a practice session.</p></div>`;
- footer(`<button class="btn" id="cont">Practice to earn a heart</button><button class="btn ghost skip" id="later">Quit</button>`);
- $("#cont").onclick=()=>{endLesson();startPractice(Object.keys(S.miss).length?"mistakes":"review")};$("#later").onclick=()=>endLesson()}
-
 /* ================= STORIES ================= */
 function startStory(st,key){
  L={story:st,key,i:0,line:0,q:[],answered:0,total:st.lines.length+st.questions.length,right:0,wrong:0,combo:0,best:0,start:Date.now()};
@@ -583,11 +573,6 @@ function sheet(html,after){closeSheet();lastFocus=document.activeElement;$("#lay
 function closeSheet(){const s=$("#sheet");if(s){s.remove();lastFocus?.focus?.()}}
 let toastT=null;function toast(icon,text){$$(".toast").forEach(t=>t.remove());const t=document.createElement("div");t.className="toast";t.setAttribute("role","status");t.innerHTML=icon+`<span>${esc(text)}</span>`;document.body.appendChild(t);clearTimeout(toastT);toastT=setTimeout(()=>t.remove(),2600)}
 function streakSheet(){sheet(`<div class="streakbig" style="color:var(--gold)">${I.flame}<div><b style="color:var(--ink)">${S.streak} day streak</b><p class="muted small">Best: ${S.best} ${S.best===1?"day":"days"}</p></div></div>${weekDots()}<p class="muted">${S.last===today()?"You practiced today. The flame is lit.":"Finish any lesson today to keep your streak."}</p><h3>Daily quests</h3>${questsHtml()}<button class="btn" data-close>Got it</button>`)}
-function heartSheet(blocked){const t=nextHeartIn(),hrs=Math.floor(t/HOUR),mins=Math.ceil((t%HOUR)/MIN);
- sheet(`<h2>${blocked?"You're out of hearts":"Hearts"}</h2><div class="row" style="color:var(--lotus)">${[0,1,2,3,4].map(i=>`<span style="width:34px;opacity:${i<S.hearts?1:.2}">${I.heart}</span>`).join("")}</div>
- <p>You lose a heart for each mistake in a lesson. ${S.hearts<5?`Next heart in <b>${hrs?hrs+" h ":""}${mins} min</b>.`:"You have all 5."} Practice never costs hearts, and finishing a session gives one back.</p>
- <button class="btn" id="hp">Practice to earn a heart</button><button class="btn ghost" data-close>Close</button>`,()=>{$("#hp").onclick=()=>{closeSheet();startPractice(Object.keys(S.miss).length?"mistakes":"review")}})}
-
 /* ================= ONBOARDING ================= */
 function onboarding(){let step=0;const o=document.createElement("div");o.className="onb";document.body.appendChild(o);
  const pickRow=(id,ic,b,s,on)=>`<button class="pickcard" data-pick="${id}" aria-pressed="${on}"><span class="ic">${ic}</span><span><b>${b}</b><span>${s}</span></span></button>`;
@@ -614,7 +599,6 @@ applyTheme();dailyRefresh();shell();setTab("learn");
 if(!S.onb)onboarding();
 setTimeout(()=>{UI.findVoice();if(!L&&(tab==="guide"||tab==="practice"))render()},900);
 if("speechSynthesis" in window)speechSynthesis.addEventListener?.("voiceschanged",()=>{if(!L&&tab==="guide")render()});
-setInterval(()=>{if(!L){const h=S.hearts;regen();if(h!==S.hearts){save();topStats()}}},60000);
 if("serviceWorker" in navigator&&location.protocol.startsWith("http")&&location.hostname!=="localhost")navigator.serviceWorker.register("sw.js").catch(()=>{});
 window.__nhim={get S(){return S},get L(){return L},startLesson,buildLesson,ORDER,numVi,showQ,grade};
 })();

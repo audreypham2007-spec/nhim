@@ -1,5 +1,5 @@
 // Offline support: serve saved files first, refresh them in the background.
-const CACHE = "nhim-v3.7";
+const CACHE = "nhim-v3.8";
 const FILES = ["./", "index.html", "about.html", "css/styles.css", "js/data.js", "js/voices.js", "js/ui.js", "js/pitch.js", "js/telex.js", "js/chat.js", "js/talk.js", "js/app.js", "icon.svg", "icon-192.png", "icon-512.png", "icon-maskable.png", "manifest.webmanifest"];
 self.addEventListener("install", e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES))); self.skipWaiting(); });
 self.addEventListener("activate", e => {

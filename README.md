@@ -20,7 +20,7 @@ Made by Audrey Pham, Communication Sciences and Disorders, California State Univ
 
 Vietnamese has six tones. A change in pitch changes the word: ma (ghost), má (mother), mà (but), mả (grave), mã (horse), mạ (rice seedling). Most apps treat tones as a footnote. Nhím teaches them first and draws each one as a pitch line, so you see what your voice should do. Then you say the word into your microphone and see your own pitch line on top.
 
-I study speech-language pathology, and I care about bilingual speakers. Many Vietnamese American students understand Vietnamese at home but can't read or write it. Nhím is built for them:
+I spoke Vietnamese only at home, and when I started going to an American public school, my words were jumbled up. Bilingual children are often misidentified with speech disorders. I was one of them. Now I study speech-language pathology, and I care about bilingual speakers. Many Vietnamese American students understand Vietnamese at home but can't read or write it. Nhím is built for them:
 
 - It accepts both Northern and Southern words (vâng/dạ, bố/ba, mẹ/má, đắt/mắc) and shows the learner's home dialect first.
 - It teaches family pronouns early, with a tap-through family tree, because "I" and "you" depend on who you're talking to. Then you practice them in conversations with Bà, Ông, and a friend's mom, who react to your choices.

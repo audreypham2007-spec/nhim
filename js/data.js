@@ -484,6 +484,154 @@ window.NHIM = {
         {after:7, q:"What will they do tonight?", opts:["Watch fireworks","See a lion dance","Go to school"], ans:"Watch fireworks"}
       ]
     }
+ ,
+    { id:"s9", unit:"u3", title:"How old are you?", vi:"Em mấy tuổi?", cast:{an:"An", kim:"Kim"},
+      lines:[
+        {who:"an", vi:"Chị Kim ơi, chị bao nhiêu tuổi?", en:"Kim, how old are you?"},
+        {who:"kim", vi:"Chị hai mươi mốt tuổi. Còn em?", en:"I'm twenty-one. And you?"},
+        {who:"an", vi:"Dạ, em mười lăm tuổi.", en:"I'm fifteen."},
+        {who:"kim", vi:"Số điện thoại của em là bao nhiêu?", en:"What's your phone number?"},
+        {who:"an", vi:"Dạ, không chín không ba, bốn năm sáu, bảy tám chín.", en:"It's 0903 456 789."},
+        {who:"kim", vi:"Tối nay chị gọi em nha.", en:"I'll call you tonight."},
+        {who:"an", vi:"Chị ở Việt Nam mấy ngày?", en:"How many days are you staying in Vietnam?"},
+        {who:"kim", vi:"Chị ở mười ngày.", en:"Ten days."},
+        {who:"an", vi:"Ít quá! Chị ở một trăm ngày đi!", en:"That's so short! Stay a hundred days!"}
+      ],
+      questions:[
+        {after:1, q:"How old is Kim?", opts:["21","12","31"], ans:"21"},
+        {after:2, q:"How old is An?", opts:["15","5","50"], ans:"15"},
+        {after:7, q:"How long is Kim staying?", opts:["10 days","100 days","10 weeks"], ans:"10 days"}
+      ]
+    },
+
+    { id:"s10", unit:"u6", title:"Mom's morning call", vi:"Má gọi buổi sáng", cast:{ma:"Má", huy:"Huy"},
+      lines:[
+        {who:"ma", vi:"Huy ơi, con dậy chưa?", en:"Huy, are you up yet?"},
+        {who:"huy", vi:"Dạ, con dậy rồi má.", en:"Yes, I'm up, Mom."},
+        {who:"ma", vi:"Bây giờ là bảy giờ rồi. Con ăn sáng chưa?", en:"It's already seven. Have you had breakfast?"},
+        {who:"huy", vi:"Dạ chưa. Con đang tắm.", en:"Not yet. I'm taking a shower."},
+        {who:"ma", vi:"Hôm nay con đi học hay đi làm?", en:"Are you going to school or to work today?"},
+        {who:"huy", vi:"Dạ, sáng con đi học, chiều con làm việc.", en:"School in the morning, work in the afternoon."},
+        {who:"ma", vi:"Tối nay con về nhà ăn cơm nha.", en:"Come home for dinner tonight, okay?"},
+        {who:"huy", vi:"Dạ, con về lúc sáu giờ.", en:"Okay, I'll be home at six."}
+      ],
+      questions:[
+        {after:3, q:"What is Huy doing right now?", opts:["Showering","Eating breakfast","Sleeping"], ans:"Showering"},
+        {after:5, q:"What does Huy do in the afternoon?", opts:["Works","Studies","Sleeps"], ans:"Works"},
+        {after:7, q:"When will Huy come home?", opts:["6:00","7:00","8:00"], ans:"6:00"}
+      ]
+    },
+
+    { id:"s11", unit:"u8", title:"Two áo dài", vi:"Hai cái áo dài", cast:{nga:"Cô Nga", my:"My"},
+      lines:[
+        {who:"nga", vi:"Con thích màu gì?", en:"What color do you like?"},
+        {who:"my", vi:"Dạ, con thích màu xanh dương.", en:"I like blue."},
+        {who:"nga", vi:"Áo dài này màu xanh dương nè. Đẹp không?", en:"This áo dài is blue. Isn't it pretty?"},
+        {who:"my", vi:"Đẹp quá! Nhưng má con thích màu đỏ.", en:"So pretty! But my mom likes red."},
+        {who:"nga", vi:"Áo màu đỏ cũng có. Còn có màu hồng nữa.", en:"We have red too. And pink."},
+        {who:"my", vi:"Con lấy áo xanh cho con, áo đỏ cho má.", en:"I'll take the blue one for me and the red one for Mom."},
+        {who:"nga", vi:"Hai cái áo đẹp lắm. Mặc đi Tết nha!", en:"They're both beautiful. Wear them for Tết!"},
+        {who:"my", vi:"Dạ, con cảm ơn cô!", en:"Thank you!"}
+      ],
+      questions:[
+        {after:1, q:"What color does My like?", opts:["Blue","Red","Pink"], ans:"Blue"},
+        {after:3, q:"What color does My's mom like?", opts:["Red","Purple","White"], ans:"Red"},
+        {after:5, q:"How many áo dài does My buy?", opts:["Two","One","Three"], ans:"Two"}
+      ]
+    },
+
+    { id:"s12", unit:"u9", title:"Grandpa's birthday", vi:"Sinh nhật ông ngoại", cast:{kim:"Kim", ong:"Ông ngoại"},
+      lines:[
+        {who:"kim", vi:"Ông ngoại ơi, sinh nhật ông là ngày nào?", en:"Grandpa, when is your birthday?"},
+        {who:"ong", vi:"Thứ bảy tuần sau, ngày mười hai tháng ba.", en:"Next Saturday, March 12."},
+        {who:"kim", vi:"Năm nay ông bao nhiêu tuổi ạ?", en:"How old are you turning this year?"},
+        {who:"ong", vi:"Ông tám mươi tuổi rồi con.", en:"I'm eighty now."},
+        {who:"kim", vi:"Mấy giờ mình ăn tiệc ạ?", en:"What time is the party?"},
+        {who:"ong", vi:"Sáu giờ rưỡi tối. Con tới sớm nha.", en:"Six thirty in the evening. Come early."},
+        {who:"kim", vi:"Dạ, con tới lúc năm giờ.", en:"Okay, I'll come at five."},
+        {who:"ong", vi:"Giỏi quá! Ông chờ con.", en:"Wonderful! I'll be waiting for you."}
+      ],
+      questions:[
+        {after:1, q:"When is Grandpa's birthday?", opts:["Next Saturday","Next Sunday","Tomorrow"], ans:"Next Saturday"},
+        {after:3, q:"How old is Grandpa turning?", opts:["80","70","90"], ans:"80"},
+        {after:5, q:"What time is the party?", opts:["6:30 p.m.","5:00 p.m.","6:30 a.m."], ans:"6:30 p.m."}
+      ]
+    },
+
+    { id:"s13", unit:"u12", title:"Rainy season", vi:"Mùa mưa", cast:{khoa:"Khoa", huong:"Hương"},
+      lines:[
+        {who:"khoa", vi:"Hôm nay trời nóng quá!", en:"It's so hot today!"},
+        {who:"huong", vi:"Dạ, nhưng chiều nay trời sẽ mưa.", en:"Yes, but it's going to rain this afternoon."},
+        {who:"khoa", vi:"Thật hả? Trời đang nắng đẹp mà.", en:"Really? It's sunny and nice right now."},
+        {who:"huong", vi:"Mùa mưa ở Sài Gòn là vậy đó. Sáng nắng, chiều mưa.", en:"That's rainy season in Saigon. Sunny mornings, rainy afternoons."},
+        {who:"khoa", vi:"Ở Mỹ, chỗ anh ở mùa đông lạnh lắm.", en:"Where I live in America, winter is really cold."},
+        {who:"huong", vi:"Em chưa thấy tuyết bao giờ.", en:"I've never seen snow."},
+        {who:"khoa", vi:"Mùa đông năm nay em qua Mỹ chơi đi!", en:"Come visit America this winter!"},
+        {who:"huong", vi:"Dạ! Nhưng bây giờ anh mang áo mưa nhé.", en:"Okay! But for now, bring a raincoat."}
+      ],
+      questions:[
+        {after:1, q:"What will the weather be this afternoon?", opts:["Rainy","Sunny","Cold"], ans:"Rainy"},
+        {after:3, q:"What is rainy season like in Saigon?", opts:["Sunny mornings, rainy afternoons","Rain all day","Cold and windy"], ans:"Sunny mornings, rainy afternoons"},
+        {after:7, q:"What should Khoa bring?", opts:["A raincoat","A hat","A fan"], ans:"A raincoat"}
+      ]
+    },
+
+    { id:"s14", unit:"u13", title:"At the pharmacy", vi:"Ở nhà thuốc", cast:{thu:"Chị Thu", duc:"Đức"},
+      lines:[
+        {who:"thu", vi:"Em bị sao vậy?", en:"What's wrong?"},
+        {who:"duc", vi:"Dạ, em bị đau đầu và ho.", en:"I have a headache and a cough."},
+        {who:"thu", vi:"Em có bị sốt không?", en:"Do you have a fever?"},
+        {who:"duc", vi:"Dạ, hôm qua em sốt một chút.", en:"I had a little fever yesterday."},
+        {who:"thu", vi:"Đây là thuốc. Mỗi ngày uống ba lần, sau khi ăn.", en:"Here's the medicine. Three times a day, after meals."},
+        {who:"duc", vi:"Bao nhiêu tiền vậy chị?", en:"How much is it?"},
+        {who:"thu", vi:"Năm mươi nghìn. Ba ngày không đỡ thì em đi gặp bác sĩ nha.", en:"Fifty thousand. If you're not better in three days, go see a doctor."},
+        {who:"duc", vi:"Dạ, em cảm ơn chị.", en:"Thank you."},
+        {who:"thu", vi:"Chúc em mau khỏe!", en:"Get well soon!"}
+      ],
+      questions:[
+        {after:1, q:"What's wrong with Đức?", opts:["Headache and cough","Stomachache","Toothache"], ans:"Headache and cough"},
+        {after:4, q:"How often should he take the medicine?", opts:["3 times a day","Once a day","Twice a day"], ans:"3 times a day"},
+        {after:6, q:"How much does it cost?", opts:["50,000 đồng","15,000 đồng","500,000 đồng"], ans:"50,000 đồng"}
+      ]
+    },
+
+    { id:"s15", unit:"u14", title:"Saturday Vietnamese class", vi:"Lớp tiếng Việt thứ bảy", cast:{loan:"Cô Loan", tam:"Tâm"},
+      lines:[
+        {who:"loan", vi:"Chào các em. Cô tên là Loan.", en:"Hello, everyone. My name is Loan."},
+        {who:"tam", vi:"Em chào cô ạ.", en:"Hello, teacher."},
+        {who:"loan", vi:"Em tên gì? Em là học sinh hay sinh viên?", en:"What's your name? Are you in high school or college?"},
+        {who:"tam", vi:"Dạ, em tên là Tâm. Em là sinh viên năm nhất.", en:"My name is Tâm. I'm a first-year college student."},
+        {who:"loan", vi:"Sao em học tiếng Việt?", en:"Why are you learning Vietnamese?"},
+        {who:"tam", vi:"Dạ, em muốn nói chuyện với bà ngoại.", en:"I want to be able to talk with my grandma."},
+        {who:"loan", vi:"Hay quá! Đây là sách và bài tập của em.", en:"That's wonderful! Here's your book and homework."},
+        {who:"tam", vi:"Dạ. Thứ bảy tuần sau mình có thi không cô?", en:"Is there a test next Saturday?"},
+        {who:"loan", vi:"Không có thi. Em đừng lo!", en:"No test. Don't worry!"}
+      ],
+      questions:[
+        {after:3, q:"Is Tâm in high school or college?", opts:["College","High school","Neither, Tâm works"], ans:"College"},
+        {after:5, q:"Why is Tâm learning Vietnamese?", opts:["To talk with Grandma","For a job","For a test"], ans:"To talk with Grandma"},
+        {after:8, q:"Is there a test next Saturday?", opts:["No","Yes","On Sunday"], ans:"No"}
+      ]
+    },
+
+    { id:"s16", unit:"u15", title:"Grandma is coming", vi:"Bà ngoại tới chơi", cast:{ma:"Má", han:"Hân"},
+      lines:[
+        {who:"ma", vi:"Hân ơi, chiều nay bà ngoại tới chơi.", en:"Hân, Grandma is coming over this afternoon."},
+        {who:"han", vi:"Dạ! Con giúp gì được má?", en:"Yay! How can I help, Mom?"},
+        {who:"ma", vi:"Con quét nhà với dọn phòng khách đi.", en:"Sweep the floor and tidy up the living room."},
+        {who:"han", vi:"Dạ. Còn rửa chén thì sao má?", en:"Okay. What about the dishes?"},
+        {who:"ma", vi:"Anh Hai rửa chén rồi. Con mở cửa sổ ra cho mát.", en:"Your oldest brother already did them. Open the windows to cool the place down."},
+        {who:"han", vi:"Má ơi, trái cây ở đâu vậy?", en:"Mom, where's the fruit?"},
+        {who:"ma", vi:"Trái cây ở trong tủ lạnh.", en:"The fruit is in the fridge."},
+        {who:"han", vi:"Con để trái cây trên bàn nha.", en:"I'll put the fruit on the table."},
+        {who:"ma", vi:"Giỏi quá! Bà ngoại sẽ vui lắm.", en:"Great job! Grandma will be so happy."}
+      ],
+      questions:[
+        {after:0, q:"Who is coming over?", opts:["Grandma","An uncle","A teacher"], ans:"Grandma"},
+        {after:4, q:"Who washed the dishes? (In the South, anh Hai is the oldest brother.)", opts:["Her oldest brother","Hân","Mom"], ans:"Her oldest brother"},
+        {after:6, q:"Where is the fruit?", opts:["In the fridge","On the table","In the bedroom"], ans:"In the fridge"}
+      ]
+    }
   ],
 
   NUMBERS: {0:"không",1:"một",2:"hai",3:"ba",4:"bốn",5:"năm",6:"sáu",7:"bảy",8:"tám",9:"chín",10:"mười"}

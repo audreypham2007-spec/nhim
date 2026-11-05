@@ -311,7 +311,7 @@ function startPractice(kind){const q=buildPractice(kind);if(!q.length)return toa
 /* ----- stories list ----- */
 function renderStories(v){
  v.innerHTML=`<header><h1 style="font-size:2rem">Stories</h1><p class="muted">Short conversations. Tap any word to see what it means.</p></header>
- <div class="storygrid">${STORIES.map(st=>{const ui=UNITS.findIndex(u=>u.id===st.unit),key=ui+":s",op=unlocked(key),done=!!S.stories[st.id],col=UNITS[ui]?.color||"var(--leaf)";
+ <div class="storygrid">${[...STORIES].sort((a,b)=>UNITS.findIndex(u=>u.id===a.unit)-UNITS.findIndex(u=>u.id===b.unit)).map(st=>{const ui=UNITS.findIndex(u=>u.id===st.unit),key=ui+":s",op=unlocked(key),done=!!S.stories[st.id],col=UNITS[ui]?.color||"var(--leaf)";
   return `<button class="scard ${op?"":"locked"}" data-story="${st.id}" style="--sc:${col}"><span class="cover">${op?mascotStory(st):I.lock}${done?`<span class="tick">${I.check}</span>`:""}</span><b>${esc(st.title)}</b><span>${esc(st.vi)}${op?"":` · after Unit ${ui+1} phrases`}</span></button>`}).join("")}</div>`;
  $$("[data-story]",v).forEach(b=>b.onclick=()=>{const st=STORIES.find(s=>s.id===b.dataset.story),ui=UNITS.findIndex(u=>u.id===st.unit);
   if(!unlocked(ui+":s"))return toast(I.lock,`Unlocks after the Phrases lesson in Unit ${ui+1}.`);startStory(st,ui+":s")})}

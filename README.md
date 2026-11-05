@@ -29,7 +29,7 @@ I study speech-language pathology, and I care about bilingual speakers. Many Vie
 
 **Course**
 - The six tones, then 16 units: Greetings, Family, Numbers, Food, Questions, Daily life, Feelings, Colors, Time and dates, Shopping and money, Getting around, Weather, Body and health, School and work, At home, and Tết.
-- 350+ words and sentences, 8 dialogue stories, and a unit check at the end of each unit.
+- 350+ words and sentences, 16 dialogue stories (one per unit), and a unit check at the end of each unit.
 - 10 exercise types: word cards, multiple choice, listening, type what you hear, match pairs, sentence building (both directions), fill in the blank, typing, tone identification, and pitch shape matching.
 
 **Tone tools**

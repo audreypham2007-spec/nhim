@@ -41,7 +41,9 @@ function dailyRefresh(){if(S.last&&dayDiff(S.last,today())>1)S.streak=0;ensureQu
 function addXp(n){S.xp+=n;const t=today();S.daily[t]=(S.daily[t]||0)+n;let extended=false;
  if(S.last!==t){S.streak=(S.last&&dayDiff(S.last,t)===1)?S.streak+1:1;S.last=t;S.best=Math.max(S.best,S.streak);extended=true}
  questProg("xp",S.daily[t],true);save();return extended}
-const listenOK=()=>UI.hasVoice()&&S.set.sound!==false&&Date.now()>S.noListenUntil;
+const famCount=()=>window.VOICES?VOICES.count():0;
+const listenOK=()=>(UI.hasVoice()||famCount()>=8)&&S.set.sound!==false&&Date.now()>S.noListenUntil;
+const canHear=t=>UI.hasVoice()||(window.VOICES&&VOICES.has(t));
 const say=(t,o={})=>{if(S.set.sound!==false)speak(t,{rate:S.set.rate,...o})};
 const fx=k=>{if(S.set.sound!==false)sfx(k)};
 
@@ -286,11 +288,56 @@ function renderPractice(v){
   <button class="hubcard" data-p="numbers" style="--hc:var(--gold-deep)"><span class="ic">${I.hash}</span><h3>Numbers</h3><p>0 to 999, with mốt, lăm, tư, and linh or lẻ.</p><span class="count">10 questions</span></button>
   ${window.PITCH&&PITCH.supported()?`<button class="hubcard wide" data-mirror style="--hc:var(--lotus)"><span class="ic">${I.mic}</span><span style="flex:1"><h3>Tone mirror</h3><p>Say a word into your mic and see your pitch line next to the real tone.</p></span><span class="count">${S.cnt.mirror?S.cnt.mirror+" tries":"New"}</span></button>`:""}
   <button class="hubcard" data-telex style="--hc:var(--indigo)"><span class="ic">${I.keyb}</span><h3>Type Vietnamese</h3><p>Learn Telex: aa is â, dd is đ, s adds a rising tone.</p><span class="count">${S.cnt.typed?S.cnt.typed+" typed":"10 words"}</span></button>
-  ${UI.hasVoice()?`<button class="hubcard" data-p="listening" style="--hc:#2C7A7B"><span class="ic">${I.ear}</span><h3>Listening</h3><p>Ears only. Hear it, pick it or type it.</p><span class="count">10 questions</span></button>`:""}
+  <button class="hubcard wide" data-voices style="--hc:var(--gold-deep)"><span class="ic">${I.family}</span><span style="flex:1"><h3>Family voices</h3><p>Ask Bà, Ông, Má or Ba to record words. Nhím plays their voice instead of the computer's.</p></span><span class="count">${famCount()?famCount()+" recorded":"New"}</span></button>
+  ${UI.hasVoice()||famCount()>=8?`<button class="hubcard" data-p="listening" style="--hc:#2C7A7B"><span class="ic">${I.ear}</span><h3>Listening</h3><p>Ears only. Hear it, pick it or type it.</p><span class="count">10 questions</span></button>`:""}
  </div>
  <section class="panel"><div class="spread"><h2>Word strength</h2><span class="muted small">${learnedCount()} ${learnedCount()===1?"word":"words"} learned</span></div>
  ${weak.length?`<div class="vlist">${weak.map(({it,r})=>`<div><span><b>${esc(disp(it))}</b><br><span class="muted small">${esc(it.en)}</span></span><span class="row" style="gap:10px"><span class="strength" aria-label="Strength ${r.s} of 5">${[1,2,3,4,5].map(i=>`<i class="${r.s>=i?"on":""}"></i>`).join("")}</span><button class="mini" data-say="${esc(disp(it))}" aria-label="Play">${I.sound}</button></span></div>`).join("")}</div>`:`<p class="muted">Finish a lesson and your words show up here, weakest first.</p>`}</section>`;
- $$("[data-p]",v).forEach(b=>b.onclick=()=>startPractice(b.dataset.p));const mb=$("[data-mirror]",v);if(mb)mb.onclick=openMirror;$("[data-telex]",v).onclick=openTelex}
+ $$("[data-p]",v).forEach(b=>b.onclick=()=>startPractice(b.dataset.p));const mb=$("[data-mirror]",v);if(mb)mb.onclick=openMirror;$("[data-telex]",v).onclick=openTelex;$("[data-voices]",v).onclick=()=>openVoices()}
+function voiceSets(){return [{id:"t",name:"The six tones",items:TONES.map(t=>({vi:t.ex,en:t.name+": "+t.mean}))},
+ ...UNITS.map((u,ui)=>({id:"u"+ui,name:`Unit ${ui+1}: ${u.title}`,items:[...unitWords(ui).map(w=>({vi:disp(w),en:w.en})),...unitPhrases(ui).map(p=>({vi:p.vi,en:p.en}))]})),
+ ...STORIES.map(st=>({id:"s"+st.id,name:"Story: "+st.title,items:st.lines.map(l=>({vi:l.vi,en:(st.cast[l.who]||"")+": "+l.en}))}))]}
+function openVoices(setId){
+ const sets=voiceSets();let set=sets.find(s=>s.id===setId)||sets[0],recording=null;
+ $("#layer").innerHTML=`<div class="lesson voices" role="dialog" aria-label="Family voices"><div class="in">
+ <div class="lhead"><button class="xbtn" id="vClose" aria-label="Close">${I.x}</button><h2 class="mtitle">Family voices</h2><span></span></div>
+ <div class="lbody">
+  <div class="vintro">${mascot("cheer").replace('class="m "','style="width:76px;height:76px;flex:none" class="m "')}<p>Hand your phone to a parent or grandparent. Each word they record replaces the computer voice everywhere in Nhím. Recordings stay on this device.</p></div>
+  ${VOICES.canRecord()?"":`<p class="vwarn">This browser can't record audio. You can still add a voice pack below.</p>`}
+  <label class="tlab" for="vWho">Who is recording?</label>
+  <input id="vWho" class="tin" maxlength="40" placeholder="Bà ngoại, Má, Ba, Cô Hai…" value="${esc(VOICES.who())}">
+  <label class="tlab" for="vSet">What to record</label>
+  <select id="vSet" class="tin">${sets.map(s=>`<option value="${s.id}" ${s.id===set.id?"selected":""}>${esc(s.name)}</option>`).join("")}</select>
+  <div class="spread vprog"><b id="vCount"></b><span class="muted small">Tap the mic, say it, tap again to stop.</span></div>
+  <div class="vlist vrec" id="vList"></div>
+  <section class="panel vpack"><h3>Share with family</h3><p class="muted small">Save every recording as one file. Send it to a cousin or your other phone, then add it there.</p>
+   <div class="row"><button class="btn ghost slim" id="vExport">Save voice pack</button><label class="btn ghost slim" for="vImport">Add a voice pack</label><input type="file" id="vImport" accept=".json,application/json" hidden></div></section>
+ </div></div></div>`;
+ document.body.style.overflow="hidden";
+ const list=$("#vList");
+ const row=(it,i)=>{const on=VOICES.has(it.vi);return `<div class="vrow ${on?"on":""}" data-i="${i}"><span class="vtxt"><b>${esc(it.vi)}</b><br><span class="muted small">${esc(it.en)}</span></span>
+  <span class="row vbtns">${on?`<button class="mini" data-play="${i}" aria-label="Play recording">${I.sound}</button><button class="mini vdel" data-del="${i}" aria-label="Delete recording">${I.x}</button>`:""}<button class="vmic" data-rec="${i}" aria-label="${on?"Record again":"Record"}">${I.mic}</button></span></div>`};
+ const draw=()=>{list.innerHTML=set.items.map(row).join("");const n=set.items.filter(it=>VOICES.has(it.vi)).length;$("#vCount").textContent=`${n} of ${set.items.length} recorded`;bind()};
+ const bind=()=>{
+  $$("[data-play]",list).forEach(b=>b.onclick=()=>VOICES.play(set.items[+b.dataset.play].vi));
+  $$("[data-del]",list).forEach(b=>b.onclick=async()=>{await VOICES.del(set.items[+b.dataset.del].vi);draw()});
+  $$("[data-rec]",list).forEach(b=>b.onclick=async()=>{
+   const i=+b.dataset.rec,it=set.items[i];
+   if(recording!=null){if(recording!==i)return;recording=null;const blob=await VOICES.stopRec();
+    if(blob&&blob.size>1500){await VOICES.put(it.vi,{text:it.vi,who:VOICES.who(),ts:Date.now(),blob});fx("ok");draw();VOICES.play(it.vi);
+     const next=set.items.findIndex((x,j)=>j>i&&!VOICES.has(x.vi));if(next>=0)$(`[data-i="${next}"]`,list)?.scrollIntoView({block:"center",behavior:"smooth"})}
+    else{draw();toast(I.mic,"That was too short. Try again.")}
+    return}
+   try{VOICES.stop();try{speechSynthesis.cancel()}catch(e){}await VOICES.startRec(7000)}catch(e){return toast(I.mic,"Allow the microphone to record.")}
+   recording=i;b.classList.add("on");b.setAttribute("aria-label","Stop recording");$(`[data-i="${i}"]`,list).classList.add("rec");
+   setTimeout(()=>{if(recording===i)b.click()},7000)})};
+ $("#vWho").oninput=e=>VOICES.setWho(e.target.value.trim());
+ $("#vSet").onchange=e=>{if(recording!=null)return;set=sets.find(s=>s.id===e.target.value);draw()};
+ $("#vClose").onclick=async()=>{if(recording!=null){recording=null;await VOICES.stopRec()}VOICES.stop();$("#layer").innerHTML="";document.body.style.overflow="";render()};
+ $("#vExport").onclick=async()=>{if(!famCount())return toast(I.family,"Record something first.");const blob=await VOICES.exportPack(),a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);a.download=`nhim-voices${VOICES.who()?"-"+VOICES.who().replace(/[^\p{L}\p{N}]+/gu,"-"):""}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000)};
+ $("#vImport").onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const n=await VOICES.importPack(f);toast(I.family,`Added ${n} ${n===1?"recording":"recordings"}.`);$("#vWho").value=VOICES.who();draw()}catch(err){toast(I.x,err.message||"Couldn't read that file.")}e.target.value=""};
+ draw()}
 function openTelex(){
  const learned=Object.keys(S.srs).map(vi=>WORD_BY_VI.get(norm(vi))).filter(Boolean);
  const marked=w=>/[^\x00-\x7f]/.test(disp(w))&&TELEX.same(TELEX.convert(TELEX.spell(disp(w))),disp(w));
@@ -358,7 +405,7 @@ function renderGuide(v){
  <div class="tbl"><table><thead><tr><th>Type</th><th>Get</th><th>Type</th><th>Get</th></tr></thead><tbody>
  <tr><td>aa</td><td>â</td><td>s</td><td>sắc (á)</td></tr><tr><td>aw</td><td>ă</td><td>f</td><td>huyền (à)</td></tr><tr><td>ee</td><td>ê</td><td>r</td><td>hỏi (ả)</td></tr>
  <tr><td>oo / ow</td><td>ô / ơ</td><td>x</td><td>ngã (ã)</td></tr><tr><td>uw</td><td>ư</td><td>j</td><td>nặng (ạ)</td></tr><tr><td>dd</td><td>đ</td><td>z</td><td>remove mark</td></tr></tbody></table></div><p class="hint">Example: type <b>vieetj</b> to get <b>việt</b>.</p></section>
- ${UI.hasVoice()?"":`<section class="panel" style="background:var(--gold-tint);border-color:transparent"><h2>Turn on audio</h2><p>This browser has no Vietnamese voice, so listening exercises are off. On Android or Chrome, add Vietnamese text-to-speech in your device settings. On iPhone, go to Settings, Accessibility, Spoken Content, Voices, and add Vietnamese. Then reload.</p></section>`}`;
+ ${UI.hasVoice()?"":`<section class="panel" style="background:var(--gold-tint);border-color:transparent"><h2>Turn on audio</h2><p>Best option: ask a family member to record words in <b>Practice → Family voices</b>. Or add a computer voice. This browser has no Vietnamese voice, so listening exercises are off. On Android or Chrome, add Vietnamese text-to-speech in your device settings. On iPhone, go to Settings, Accessibility, Spoken Content, Voices, and add Vietnamese. Then reload.</p></section>`}`;
  bindTones(v);bindTree(v)}
 
 /* ----- profile ----- */
@@ -403,7 +450,7 @@ function renderProfile(v){
 let L=null;
 function startLesson(u,k,qs){
  const practice=u==="practice";
- let q=qs||buildLesson(u,k);q=q.filter(x=>!x.needsAudio||listenOK());
+ let q=qs||buildLesson(u,k);q=q.filter(x=>!x.needsAudio||(listenOK()&&canHear(x.audio)));
  L={u,k,q,i:0,practice,check:!practice&&lessonsOf(u).find(l=>l.k===k)?.check,total:q.filter(x=>x.type!=="intro"&&x.type!=="tone-intro").length,answered:0,right:0,wrong:0,combo:0,best:0,start:Date.now(),tonesRight:0};
  $("#layer").innerHTML=`<div class="lesson" role="dialog" aria-label="Lesson"><div class="in">
  <div class="lhead"><button class="xbtn" id="quit" aria-label="Quit lesson">${I.x}</button><div class="pbar" id="pbarw"><i id="pbar" style="width:0%"></i><span class="combo" id="combo"></span></div>

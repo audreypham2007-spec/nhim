@@ -460,3 +460,24 @@ kbd.big{font-size:1.2rem}
 .node:not(.locked){border:2.5px solid color-mix(in srgb,var(--u) 50%,#1F1A15)}
 .node.done{border-color:color-mix(in srgb,var(--gold) 50%,#1F1A15)}
 .brand{text-shadow:2px 2px 0 color-mix(in srgb,var(--gold) 55%,transparent)}
+
+/* ---------- family voices ---------- */
+.vintro{display:flex;gap:12px;align-items:center;background:var(--gold-tint);border-radius:var(--r-m);padding:12px 14px;font-weight:500}
+.vwarn{margin-top:10px;color:var(--bad);font-weight:600}
+.voices select.tin{appearance:auto;font-size:1rem}
+.vprog{margin:18px 0 8px}
+.vrec{display:flex;flex-direction:column;gap:8px}
+.vrow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border:2px solid var(--rule);border-radius:var(--r-m);background:var(--paper)}
+.vrow.on{border-color:color-mix(in srgb,var(--ok) 45%,var(--rule));background:color-mix(in srgb,var(--ok-tint) 55%,var(--paper))}
+.vrow.rec{border-color:var(--lotus)}
+.vtxt{min-width:0}
+.vtxt b{font-size:1.1rem}
+.vbtns{flex:none;gap:6px;flex-wrap:nowrap}
+.vmic{width:46px;height:46px;border-radius:50%;border:none;background:var(--lotus);color:#fff;display:grid;place-items:center;box-shadow:0 3px 0 color-mix(in srgb,var(--lotus) 62%,#000)}
+.vmic svg{width:22px;height:22px}
+.vrow.on .vmic{background:var(--paper);color:var(--lotus);border:2px solid var(--rule);box-shadow:0 3px 0 var(--rule)}
+.vmic.on{animation:pulse 1s infinite;background:var(--lotus)!important;color:#fff!important}
+.vdel{color:var(--ink-2)}
+.vpack{margin-top:18px}
+.vpack .row{gap:8px}
+.vpack .btn{flex:1;min-width:150px;cursor:pointer}

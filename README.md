@@ -24,6 +24,7 @@ I study speech-language pathology, and I care about bilingual speakers. Many Vie
 - It teaches family pronouns early, with a tap-through family tree, because "I" and "you" depend on who you're talking to.
 - Heritage speakers can skip ahead during setup.
 - It teaches Telex typing, because many heritage speakers can speak Vietnamese but have never typed it.
+- Family voices: a parent or grandparent records words and sentences, and Nhím plays their voice instead of the computer voice. You learn the Vietnamese your family actually speaks, in their accent.
 
 ## Features
 
@@ -36,6 +37,11 @@ I study speech-language pathology, and I care about bilingual speakers. Many Vie
 - Each tone drawn as a pitch contour on a 5-level scale. A dot traces the line while the word plays.
 - Tone mirror: say a word into the microphone and see your pitch line next to the target. It scores the shape of the line, not how high your voice is, and gives a tip for each tone. It runs in the browser. Nothing is recorded or saved.
 - A tone gym, and a tone mix-up chart in your profile that shows which tones you confuse with which.
+
+**Family voices**
+- Record any word, sentence, or story line. The recording replaces the computer voice everywhere in the app, including listening exercises.
+- Works even on devices with no Vietnamese computer voice: once 8 or more words are recorded, listening practice turns on for those words.
+- Recordings stay on the device. Save them as a voice pack file to share with cousins or move to another phone.
 
 **Practice**
 - Spaced repetition: each word has a strength from 0 to 5 and comes back 10 minutes, 1 day, 3 days, 1 week, 2 weeks, or a month later.
@@ -63,6 +69,7 @@ I study speech-language pathology, and I care about bilingual speakers. Many Vie
 | `js/ui.js` | The hedgehog drawn in SVG, unit scenery, tone graphs, story characters, speech, and synthesized sound effects. |
 | `js/pitch.js` | The tone mirror: microphone pitch tracking (YIN), smoothing, and shape scoring. |
 | `js/telex.js` | The Telex engine and the typing trainer. |
+| `js/voices.js` | Family voices: recording (MediaRecorder), storage (IndexedDB), playback, and voice pack files. |
 | `css/styles.css` | All styling. The look comes from Đông Hồ folk woodblock prints: grainy điệp paper and the old pigments. Dark mode is based on sơn mài lacquer. |
 | `sw.js` | Offline support. |
 
@@ -85,7 +92,7 @@ The tone mirror needs microphone access, which some browsers only allow from a w
 
 ## Roadmap
 
-- Recordings from native speakers in place of the browser voice.
+- A starter voice pack recorded by native speakers from the North and the South.
 - A study with Vietnamese American heritage speakers: a tone listening test before and after 4 weeks of use.
 
 ## Credits

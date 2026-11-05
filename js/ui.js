@@ -24,6 +24,7 @@ const I={
  clock:S2('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'),
  mic:S2('<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>'),
  keyb:S2('<rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"/>'),
+ family:S2('<circle cx="8" cy="7" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M2 20c0-3.5 2.7-6 6-6s6 2.5 6 6M13 20c.3-2.7 2-4.5 4.5-4.5S22 17.3 22 20"/>'),
  ear:S2('<path d="M6 10a6 6 0 1 1 12 0c0 3-2 4-3 5.5S14 20 11 20a3 3 0 0 1-3-3"/><path d="M9.5 10a2.5 2.5 0 1 1 5 0c0 1.5-1.5 2-1.5 3"/>'),
  wave:S2('<path d="M2 12c2-4 4-4 6 0s4 4 6 0 4-4 6 0"/><path d="M2 17c2-4 4-4 6 0s4 4 6 0 4-4 6 0" opacity=".5"/>'),
  hash:S2('<path d="M5 9h15M4 15h15M10 3 8 21M16 3l-2 18"/>'),
@@ -125,7 +126,8 @@ function avatar(name,kind){
 let viVoice=null;
 function findVoice(){try{const vs=speechSynthesis.getVoices();viVoice=vs.find(v=>/^vi/i.test(v.lang))||null}catch(e){viVoice=null}return viVoice}
 if("speechSynthesis" in window){findVoice();speechSynthesis.addEventListener?.("voiceschanged",findVoice)}
-function speak(text,{slow=false,rate=.9}={}){try{if(!("speechSynthesis" in window))return;speechSynthesis.cancel();
+function speak(text,o={}){if(window.VOICES&&VOICES.has(text)){try{speechSynthesis.cancel()}catch(e){}VOICES.play(text,o).then(ok=>{if(!ok)tts(text,o)});return}VOICES&&VOICES.stop();tts(text,o)}
+function tts(text,{slow=false,rate=.9}={}){try{if(!("speechSynthesis" in window))return;speechSynthesis.cancel();
  const u=new SpeechSynthesisUtterance(text);u.lang="vi-VN";if(viVoice)u.voice=viVoice;u.rate=slow?Math.max(.4,rate*.6):rate;speechSynthesis.speak(u)}catch(e){}}
 
 /* ---------- sound effects, synthesized so there are no audio files ---------- */

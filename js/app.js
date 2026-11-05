@@ -308,7 +308,8 @@ function renderPractice(v){
  <section class="panel"><div class="spread"><h2>Word strength</h2><span class="muted small">${learnedCount()} ${learnedCount()===1?"word":"words"} learned</span></div>
  ${weak.length?`<div class="vlist">${weak.map(({it,r})=>`<div><span><b>${esc(disp(it))}</b><br><span class="muted small">${esc(it.en)}</span></span><span class="row" style="gap:10px"><span class="strength" aria-label="Strength ${r.s} of 5">${[1,2,3,4,5].map(i=>`<i class="${r.s>=i?"on":""}"></i>`).join("")}</span><button class="mini" data-say="${esc(disp(it))}" aria-label="Play">${I.sound}</button></span></div>`).join("")}</div>`:`<p class="muted">Finish a lesson and your words show up here, weakest first.</p>`}</section>`;
  $$("[data-p]",v).forEach(b=>b.onclick=()=>startPractice(b.dataset.p));const mb=$("[data-mirror]",v);if(mb)mb.onclick=openMirror;$("[data-telex]",v).onclick=openTelex;$("[data-voices]",v).onclick=()=>openVoices();$("[data-chat]",v).onclick=()=>CHAT.open({esc,say,onAnswer:ok=>fx(ok?"ok":"bad"),onEnd:r=>{S.cnt.chats=(S.cnt.chats||0)+1;addXp(Math.max(2,r));questProg("practice",1);save()},onClose:()=>render()})}
-function voiceSets(){return [{id:"t",name:"The six tones",items:TONES.map(t=>({vi:t.ex,en:t.name+": "+t.mean}))},
+function voiceSets(){const core=[...TONES.map(t=>({vi:t.ex,en:t.name+": "+t.mean})),...[0,1,2].flatMap(ui=>unitWords(ui).slice(0,ui===2?10:14).map(w=>({vi:disp(w),en:w.en})))];
+ return [{id:"core",name:`Start here: ${core.length} key words`,items:core},{id:"t",name:"The six tones",items:TONES.map(t=>({vi:t.ex,en:t.name+": "+t.mean}))},
  ...UNITS.map((u,ui)=>({id:"u"+ui,name:`Unit ${ui+1}: ${u.title}`,items:[...unitWords(ui).map(w=>({vi:disp(w),en:w.en})),...unitPhrases(ui).map(p=>({vi:p.vi,en:p.en}))]})),
  ...STORIES.map(st=>({id:"s"+st.id,name:"Story: "+st.title,items:st.lines.map(l=>({vi:l.vi,en:(st.cast[l.who]||"")+": "+l.en}))}))]}
 function openVoices(setId){

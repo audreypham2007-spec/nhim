@@ -66,7 +66,69 @@ const TALKS=[
    {npc:["Ăn bánh chưng với ông nha.","Have some bánh chưng with me."],choices:[
     {vi:"Dạ, cháu mời ông ăn trước ạ.",en:"Please, Grandpa, you eat first.",q:"best",note:"Elders eat first. Inviting him is a lovely touch."},
     {vi:"Dạ!",en:"Okay!",q:"ok",note:"Good. Inviting him first would be even better."},
-    {vi:"Cháu không thích bánh chưng.",en:"I don't like bánh chưng.",q:"ok",re:["Ha ha, vậy ăn mứt nha!","Ha ha, then have some candied fruit!"],note:"Honest. A softer way: Dạ, cháu ăn một chút thôi ạ (just a little)."}]}]}
+    {vi:"Cháu không thích bánh chưng.",en:"I don't like bánh chưng.",q:"ok",re:["Ha ha, vậy ăn mứt nha!","Ha ha, then have some candied fruit!"],note:"Honest. A softer way: Dạ, cháu ăn một chút thôi ạ (just a little)."}]}]},
+ {id:"t4",title:"At the market",vi:"Đi chợ",who:"Cô Sáu",kind:"co",
+  intro:"You're buying mangoes from a fruit seller about your parents' age. Calling her cô and yourself con is friendly, and it might even get you a better price.",
+  steps:[
+   {npc:["Con mua gì vậy con?","What would you like to buy?"],choices:[
+    {vi:"Dạ, cô bán cho con một ký xoài.",en:"Could I get a kilo of mangoes, please?",q:"best",note:"Dạ, cô and con: polite and friendly. \"Bán cho con…\" is how you ask to buy."},
+    {vi:"Cho tôi một ký xoài.",en:"Give me a kilo of mangoes.",q:"ok",note:"Tôi is acceptable with a seller, but con sounds warmer."},
+    {vi:"Ê, xoài bao nhiêu?",en:"Hey, how much are the mangoes?",q:"oops",re:["Ê gì mà ê! Con nói chuyện lịch sự chút nha.","Hey?! Speak a little more politely, okay?"],note:"Ê is how you call a friend. Never use it with someone older."}]},
+   {npc:["Một ký bảy chục nghìn.","Seventy thousand a kilo."],choices:[
+    {vi:"Dạ, cô bớt cho con chút được không cô?",en:"Could you lower it a little?",q:"best",note:"\"Bớt chút được không\" is the friendly way to bargain at a market."},
+    {vi:"Dạ, được ạ.",en:"Okay.",q:"ok",note:"Fine! At markets, people usually bargain a little, though."},
+    {vi:"Mắc quá! Cô nói dối.",en:"Too expensive! You're lying.",q:"oops",re:["Trời, cô bán đúng giá mà!","Goodness, it's a fair price!"],note:"\"Mắc quá\" is fine, but calling someone a liar is rude. Try: Mắc quá, cô bớt chút nha."}]},
+   {npc:["Thôi, sáu chục nghìn cho con.","Okay, sixty thousand for you."],choices:[
+    {vi:"Dạ, con cảm ơn cô nhiều!",en:"Thank you so much!",q:"best",note:"She gave you a discount. A warm thank-you is the right move."},
+    {vi:"Năm chục được không cô?",en:"How about fifty?",q:"ok",re:["Không được đâu con, sáu chục là rẻ rồi.","Can't do it, sixty is already cheap."],note:"Fair to try, but she already lowered it. Time to say thank you."},
+    {vi:"Ok.",en:"Ok.",q:"ok",note:"Add dạ and cảm ơn to sound kinder."}]},
+   {npc:["Lần sau ghé cô nữa nha.","Come back again next time."],choices:[
+    {vi:"Dạ, con chào cô ạ.",en:"Goodbye!",q:"best",note:"Con chào cô is a polite goodbye to an older woman."},
+    {vi:"Bye cô!",en:"Bye!",q:"ok",note:"Friendly, and many young people say it. Con chào cô is more polite."},
+    {vi:"Dạ.",en:"Okay.",q:"ok",note:"Fine, but add a goodbye."}]}]},
+ {id:"t5",title:"Your older cousin",vi:"Gặp anh họ",who:"Anh Tuấn",kind:"anh",
+  intro:"You run into your older cousin at a family party. Cousins use family words too: he's anh, and you're em.",
+  steps:[
+   {npc:["Ê Kim! Lâu quá không gặp em!","Hey Kim! Long time no see!"],choices:[
+    {vi:"Anh Tuấn! Em nhớ anh quá!",en:"Tuấn! I missed you so much!",q:"best",note:"With an older cousin, call him anh and yourself em. Casual and warm."},
+    {vi:"Dạ, con chào anh ạ.",en:"Hello, sir.",q:"ok",re:["Ha ha, con gì mà con! Em đó!","Ha ha, why con? You're em!"],note:"Very polite, but con is for your parents' generation. With a cousin, use em."},
+    {vi:"Chào bạn!",en:"Hi, friend!",q:"oops",re:["Bạn gì? Anh là anh họ của em mà!","Friend? I'm your cousin!"],note:"Cousins use family words: anh, chị, em. Not bạn."}]},
+   {npc:["Em mấy tuổi rồi? Anh nhớ em còn nhỏ xíu.","How old are you now? I remember you being tiny."],choices:[
+    {vi:"Em hai mươi rồi anh. Còn anh?",en:"I'm twenty now. And you?",q:"best",note:"Asking back keeps the conversation going."},
+    {vi:"Hai mươi.",en:"Twenty.",q:"ok",note:"Correct, but a full sentence sounds friendlier."},
+    {vi:"Tôi hai mươi tuổi.",en:"I am twenty years old.",q:"oops",re:["Tôi? Sao em nói chuyện như người lạ vậy?","Tôi? Why are you talking like a stranger?"],note:"Tôi sounds distant, even with a cousin. Use em."}]},
+   {npc:["Tối nay đi uống cà phê với anh không?","Want to get coffee with me tonight?"],choices:[
+    {vi:"Dạ đi! Mấy giờ vậy anh?",en:"Yes! What time?",q:"best",note:"Saying yes and asking the time keeps plans moving."},
+    {vi:"Ok anh.",en:"Okay.",q:"ok",note:"Totally normal between cousins."},
+    {vi:"Em bận rồi.",en:"I'm busy.",q:"ok",re:["Vậy mai nha!","Tomorrow then!"],note:"That's fine. You could add: Để mai nha anh (let's do tomorrow)."}]},
+   {npc:["Bảy giờ nha. Anh chở em đi.","Seven o'clock. I'll give you a ride."],choices:[
+    {vi:"Dạ, em cảm ơn anh!",en:"Thanks!",q:"best",note:"Accepting a ride from family is kind. Chở means to give someone a ride, usually on a motorbike."},
+    {vi:"Em tự đi được.",en:"I can get there myself.",q:"ok",re:["Thôi, để anh chở cho vui!","Nah, let me drive you, it's more fun!"],note:"Fine, but family likes to take care of you. It's okay to say yes."},
+    {vi:"Ok.",en:"Okay.",q:"ok",note:"Fine. Cảm ơn anh is a nice touch."}]}]},
+ {id:"t6",title:"A call from Ba",vi:"Ba gọi điện",who:"Ba",kind:"ba",
+  intro:"Your dad calls to check on you. With parents, you're always con, and dạ goes a long way.",
+  steps:[
+   {npc:["Alô, con hả? Ba nè.","Hello? It's Dad."],choices:[
+    {vi:"Dạ, con nghe nè ba.",en:"Hi Dad, I'm here.",q:"best",note:"\"Dạ, con nghe\" is how you answer a parent on the phone."},
+    {vi:"Alô ba.",en:"Hi Dad.",q:"ok",note:"Fine. Starting with dạ is warmer."},
+    {vi:"Tôi nghe đây.",en:"I'm listening.",q:"oops",re:["Tôi?? Con nói chuyện với ba như với khách hàng vậy!","Tôi?? You're talking to me like a customer!"],note:"Never tôi with a parent. You're always con."}]},
+   {npc:["Con học hành sao rồi? Thi tốt không?","How's school? Did the exam go well?"],choices:[
+    {vi:"Dạ, con thi tốt ạ. Ba đừng lo.",en:"It went well. Don't worry, Dad.",q:"best",note:"Reassuring your parents is a sweet touch."},
+    {vi:"Con chưa biết điểm.",en:"I don't know my grade yet.",q:"ok",note:"Honest and fine."},
+    {vi:"Cũng được ba.",en:"It was okay.",q:"ok",note:"Fine, a little flat."}]},
+   {npc:["Con có cần ba gửi tiền không?","Do you need me to send money?"],choices:[
+    {vi:"Dạ không, con đủ rồi. Con cảm ơn ba.",en:"No, I have enough. Thank you, Dad.",q:"best",note:"Thanking him even when you say no makes parents proud."},
+    {vi:"Dạ có, một chút.",en:"Yes, a little.",q:"ok",note:"Honest is fine. Add con cảm ơn ba."},
+    {vi:"Gửi nhiều nhiều nha!",en:"Send lots!",q:"ok",re:["Ha ha, con này!","Ha ha, you!"],note:"Cheeky. He'll laugh, but say thank you too."}]},
+   {npc:["Nhớ ăn uống đầy đủ, ngủ sớm nha con.","Remember to eat well and sleep early."],choices:[
+    {vi:"Dạ, con nhớ rồi. Ba cũng giữ sức khỏe nha.",en:"I will. Take care of yourself too, Dad.",q:"best",note:"Wishing health back is a loving touch."},
+    {vi:"Dạ.",en:"Okay.",q:"ok",note:"Polite and short."},
+    {vi:"Biết rồi mà ba.",en:"I know, Dad.",q:"ok",note:"Very common, but it can sound annoyed. \"Dạ, con nhớ\" is gentler."}]},
+   {npc:["Ba thương con.","I love you."],choices:[
+    {vi:"Dạ, con cũng thương ba.",en:"I love you too, Dad.",q:"best",note:"Thương back. He'll remember this call."},
+    {vi:"Love you ba!",en:"Love you, Dad!",q:"ok",note:"Lots of families mix English. He'll be happy either way."},
+    {vi:"Dạ, con chào ba.",en:"Bye, Dad.",q:"ok",note:"A polite goodbye, but he was hoping to hear thương."}]}]}
+
 ];
 const VAL={best:2,ok:1,oops:0};
 const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};

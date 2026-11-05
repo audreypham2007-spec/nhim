@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Nhím tests: running</title>
+<style>body{font:15px/1.5 system-ui,sans-serif;margin:24px;background:#fff;color:#111}.ok{color:#1a7f37}.bad{color:#c62828;font-weight:700}h1{font-size:22px}</style></head>
+<body><h1 id="sum">Running…</h1><ol id="out"></ol>
+<script src="../js/data.js"></script>
+<script src="../js/telex.js"></script>
+<script src="../js/pitch.js"></script>
+<script src="../js/chat.js"></script>
+<script src="../js/talk.js"></script>
+<script>
+/* Nhím tests. Open tests/run.html through a local server, or run:
+   chrome --headless --dump-dom http://localhost:8000/tests/run.html */
+const out=document.getElementById("out");let pass=0,fail=0;
+function t(name,fn){let ok=false,msg="";try{const r=fn();ok=r===true||r===undefined;if(!ok)msg=typeof r==="string"?r:JSON.stringify(r)}catch(e){msg=e.message}
+ ok?pass++:fail++;const li=document.createElement("li");li.className=ok?"ok":"bad";li.textContent=(ok?"PASS ":"FAIL ")+name+(msg?" → "+msg:"");out.appendChild(li)}
+const N=window.NHIM;
+
+/* ---------- Telex ---------- */
+t("Telex converts common words",()=>{const cases=[["vieetj","việt"],["ddi","đi"],["nguwowif","người"],["nguoiwf","người"],["hoaf","hòa"],["khoer","khỏe"],["quar","quả"],["gias","giá"],["tieeng","tiêng"],["tienes","tiến"],["dduwowcj","được"],["Vieejt Nam","Việt Nam"],["xin chaof","xin chào"],["rats","rát"],["trowif","trời"],["cas","cá"],["aa","â"],["aaa","aa"]];
+ const bad=cases.filter(([a,b])=>!TELEX.same(TELEX.convert(a),b)).map(([a,b])=>a+"→"+TELEX.convert(a)+" (want "+b+")");return bad.length?bad.join("; "):true});
+t("Telex round-trips every course word (except loanwords)",()=>{const ws=[...new Set(N.UNITS.flatMap(u=>u.words.flatMap(w=>[w[0],...(w[2]||[])]).concat(u.phrases.map(p=>p[0]))))];
+ const bad=ws.filter(w=>!TELEX.same(TELEX.convert(TELEX.spell(w)),w));return bad.length<=1?true:bad.join(", ")});
+t("Telex.same ignores where the mark sits, not which mark",()=>TELEX.same("hoà","hòa")&&TELEX.same("khoẻ","khỏe")&&!TELEX.same("má","mà")&&!TELEX.same("ma","má"));
+t("Telex spells words back",()=>TELEX.spell("việt")==="vieetj"&&TELEX.spell("đi")==="ddi"&&TELEX.spell("người")==="nguowif");
+
+/* ---------- tone scoring ---------- */
+const {score,targetAt}=PITCH._test,TN=N.TONES;
+const line=(f,n=40)=>[...Array(n)].map((_,i)=>({x:i/(n-1),y:f(i/(n-1)),gap:false}));
+t("Each tone's own shape scores 3 stars",()=>{const bad=TN.filter(tone=>score(tone,line(x=>targetAt(tone,x))).stars!==3).map(x=>x.name);return bad.length?bad.join(", "):true});
+t("Same shape at a higher or lower voice still scores 3 stars",()=>{const s=TN.find(x=>x.name==="sắc");return score(s,line(x=>targetAt(s,x)+1.2)).stars===3&&score(s,line(x=>targetAt(s,x)-1.2)).stars===3});
+t("Going the wrong way scores 1 star",()=>{const s=TN.find(x=>x.name==="sắc"),h=TN.find(x=>x.name==="huyền"),n=TN.find(x=>x.name==="ngang");
+ return score(s,line(x=>4-2*x)).stars===1&&score(h,line(x=>2+2*x)).stars===1&&score(n,line(x=>2+2.5*x)).stars===1});
+
+/* ---------- course content ---------- */
+t("Every unit has words, phrases and a story",()=>{const bad=N.UNITS.filter(u=>!u.words.length||!u.phrases.length||!N.STORIES.some(s=>s.unit===u.id)).map(u=>u.id);return bad.length?bad.join(", "):true});
+t("Unit ids are unique",()=>new Set(N.UNITS.map(u=>u.id)).size===N.UNITS.length);
+t("Fill-in answers are not also distractors",()=>{const bad=[];N.UNITS.forEach(u=>(u.fill||[]).forEach(f=>{if(f[2].includes(f[1])||!f[0].includes("___"))bad.push(f[0])}));return bad.length?bad.join(" | "):true});
+t("Stories: speakers exist, answers are among the choices",()=>{const bad=[];N.STORIES.forEach(s=>{const c=Object.keys(s.cast);s.lines.forEach((l,i)=>{if(!c.includes(l.who))bad.push(s.id+" line "+i)});
+ s.questions.forEach(q=>{if(!q.opts.includes(q.ans))bad.push(s.id+" q "+q.q);if(q.after>=s.lines.length)bad.push(s.id+" after "+q.after)})});return bad.length?bad.join(", "):true});
+t("Story ids are unique",()=>new Set(N.STORIES.map(s=>s.id)).size===N.STORIES.length);
+t("Talks: every step has 2-3 choices, one best, and a note on each",()=>{const bad=[];TALK.TALKS.forEach(k=>k.steps.forEach((s,i)=>{const b=s.choices.filter(c=>c.q==="best").length;
+ if(b!==1||s.choices.length<2||s.choices.length>3)bad.push(k.id+" step "+i);s.choices.forEach(c=>{if(!c.note||!["best","ok","oops"].includes(c.q))bad.push(k.id+" step "+i+" choice")})}));return bad.length?bad.join(", "):true});
+t("Talk ids are unique",()=>new Set(TALK.TALKS.map(k=>k.id)).size===TALK.TALKS.length);
+t("Every Vietnamese text is in NFC form",()=>{const all=[...N.UNITS.flatMap(u=>[...u.words.map(w=>w[0]),...u.phrases.map(p=>p[0])]),...N.STORIES.flatMap(s=>s.lines.map(l=>l.vi)),...TALK.TALKS.flatMap(k=>k.steps.flatMap(s=>[s.npc[0],...s.choices.map(c=>c.vi)])),...CHAT.MSGS.map(m=>m.vi)];
+ const bad=all.filter(x=>x!==x.normalize("NFC"));return bad.length?bad.slice(0,5).join(", "):true});
+
+/* ---------- family chat ---------- */
+t("Chat misspellings keep the letters and change a mark",()=>{const bare=s=>s.normalize("NFD").replace(/[̣̀́̃̉]/g,"");const bad=[];
+ CHAT.MSGS.forEach(m=>{for(let i=0;i<10;i++){const x=CHAT.misspell(m.vi);if(x&&(x===m.vi||bare(x)!==bare(m.vi)))bad.push(m.vi+" → "+x)}});return bad.length?bad.slice(0,3).join(" | "):true});
+t("Chat raw text matches the full message without marks",()=>{const strip=s=>s.normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/đ/g,"d").replace(/Đ/g,"D").toLowerCase().replace(/[.,!?]/g,"");
+ const SH={ko:"khong",h:"gio",j:"gi",r:"roi",dc:"duoc",mn:"moi nguoi",e:"em",c:"chi",a:"anh",ti:"ti",ba:"ba"};
+ const bad=CHAT.MSGS.filter(m=>{const raw=m.raw.replace(/[,]/g,"").split(" ").map(w=>SH[w]||w).join(" ");return strip(raw).replace(/\s+/g," ")!==strip(m.vi).replace(/\s+/g," ")});return bad.length?bad.map(m=>m.raw).join(" | "):true});
+
+const sum=document.getElementById("sum");sum.textContent=`${fail?"FAIL":"PASS"}: ${pass} passed, ${fail} failed`;sum.className=fail?"bad":"ok";
+document.title=`Nhím tests: ${pass} passed, ${fail} failed`;
+</script></body></html>

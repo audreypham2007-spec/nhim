@@ -40,7 +40,7 @@ I study speech-language pathology, and I care about bilingual speakers. Many Vie
 - A tone gym, and a tone mix-up chart in your profile that shows which tones you confuse with which.
 
 **Talk to family**
-- Branching conversations (a phone call with Bà ngoại, a friend's mom, Tết with Ông nội). Each choice is rated, the relative reacts, and a note explains why: tôi vs. con, bạn vs. bà, dạ and ạ, inviting elders to eat first, never asking how much lì xì is inside.
+- Six branching conversations: a phone call with Bà ngoại, a friend's mom, Tết with Ông nội, bargaining at the market, an older cousin, and a call from Ba. Each choice is rated, the relative reacts, and a note explains why: tôi vs. con, bạn vs. bà, dạ and ạ, inviting elders to eat first, never asking how much lì xì is inside.
 
 **Family chat**
 - Read family texts the way they're really sent: no accent marks and shortcuts like ko, dc, j, r. Pick the right full spelling, then reply with Telex.
@@ -99,6 +99,10 @@ HTML, CSS, and vanilla JavaScript. No framework, no build step, no server, no tr
 Download the repository and open `index.html` in a browser.
 
 The tone mirror needs microphone access, which some browsers only allow from a web server. In the project folder, run `python -m http.server 8000` and open http://localhost:8000.
+
+## Tests
+
+`tests/run.html` checks the Telex engine, tone scoring, and every story, conversation, and chat message (17 checks). Start a local server (`python -m http.server 8000`) and open http://localhost:8000/tests/run.html. The heading says PASS or FAIL.
 
 ## Roadmap
 

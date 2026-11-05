@@ -105,6 +105,10 @@ function exBankEn(it,pool){const toks=it.en.replace(/[.!?,]/g,"").split(" ");con
  return {type:"bank",title:"Translate this sentence",show:it.vi,audio:it.vi,tiles:shuffle([...toks,...extra]),ans:toks.join(" "),it}}
 const exType=it=>({type:"type",title:"Type this in Vietnamese",show:it.en,ans:disp(it),alts:forms(it),it});
 const exFill=f=>({type:"fill",title:"Fill in the blank",sentence:f[0],opts:shuffle([f[1],...f[2]]),ans:f[1],en:f[3],it:WORD_BY_VI.get(norm(f[1]))||null});
+const speakOK=()=>window.PITCH&&PITCH.supported()&&S.set.speak!==false&&Date.now()>(S.noSpeakUntil||0);
+const nSay=()=>S.focus==="speak"?2:1;
+const exSay=w=>({type:"say",title:"Say it",show:w,audio:w,tn:toneOf(w),it:null,speak:true});
+const sayable=list=>list.map(x=>typeof x==="string"?x:disp(x)).filter(w=>!/\s/.test(w)&&w.length<=7);
 const exToneID=w=>({type:"mc",title:"Which tone is this?",show:w,audio:w,opts:TONES.map(t=>t.name),ans:toneOf(w),tone:true,grid:true,it:{vi:w,en:"tone: "+toneOf(w),tonal:true}});
 const exToneShape=w=>({type:"shape",title:"Which pitch shape matches?",show:w,audio:w,opts:shuffle(TONES.map(t=>t.name)).slice(0,3),ans:toneOf(w),it:{vi:w,tonal:true}});
 const exToneListen=()=>{const t=pick(TONES,1)[0];return {type:"listen",title:"Which word do you hear?",audio:t.ex,opts:shuffle(TONES.map(x=>x.ex)).slice(0,4).concat([]),ans:t.ex,it:{vi:t.ex,en:t.mean,tonal:true},needsAudio:true}};
@@ -120,7 +124,7 @@ function buildLesson(ui,k){
  if(ui===-1){
   const ma=TONES.map(t=>t.ex);
   if(k===0)return [...TONES.flatMap((t,i)=>[{type:"tone-intro",t},...(i%2?[exToneID(pick(ma.slice(0,i+1),1)[0])]:[])]),...pick(ma,4).map(exToneID),exToneShape(pick(ma,1)[0])];
-  if(k===1)return shuffle([...pick(ma,3).map(exToneShape),...pick(SINGLE.map(disp),5).map(exToneShape),...pick(SINGLE.map(disp),4).map(exToneID),...(listenOK()?[fixToneListen(exToneListen()),fixToneListen(exToneListen())]:[])]);
+  if(k===1)return shuffle([...(speakOK()?pick(ma,nSay()+1).map(exSay):[]),...pick(ma,3).map(exToneShape),...pick(SINGLE.map(disp),5).map(exToneShape),...pick(SINGLE.map(disp),4).map(exToneID),...(listenOK()?[fixToneListen(exToneListen()),fixToneListen(exToneListen())]:[])]);
   return shuffle([...pick(SINGLE.map(disp),6).map(exToneID),...pick(SINGLE.map(disp),4).map(exToneShape),...(listenOK()?[fixToneListen(exToneListen()),fixToneListen(exToneListen())]:[])]);
  }
  const words=unitWords(ui),phrases=unitPhrases(ui),pool=[...words,...phrases],fills=UNITS[ui].fill||[];
@@ -130,8 +134,9 @@ function buildLesson(ui,k){
   set.forEach((w,i)=>{ex.push(exIntro(w));if(i%2===1){ex.push(Math.random()<.5?exMCvi(set[i-1],words):exMCen(set[i-1],words));ex.push(Math.random()<.5?exMCen(w,words):exMCvi(w,words))}});
   if(set.length%2)ex.push(exMCvi(set[set.length-1],words));
   ex.push(exMatch(shuffle(set)));
-  if(au)pick(set,2).forEach(w=>ex.push(exListen(w,words)));
-  pick(set,2).forEach(w=>ex.push(exType(w)));
+  if(au)pick(set,S.focus==="speak"?3:2).forEach(w=>ex.push(exListen(w,words)));
+  pick(set,S.focus==="read"?3:2).forEach(w=>ex.push(exType(w)));
+  if(speakOK())pick(sayable(set),nSay()).forEach(w=>ex.push(exSay(w)));
   if(k===1&&fills[0])ex.push(exFill(fills[0]));
   if(prev.length)ex.push(exMCen(pick(prev,1)[0],prev));
   return ex}
@@ -140,6 +145,7 @@ function buildLesson(ui,k){
   fills.slice(1,3).forEach(f=>ex.push(exFill(f)));return ex}
  if(k===3){ex.push(exMatch(pick(words,5)));pick(words,3).forEach(w=>ex.push(exMCen(w,words)));pick(phrases,3).forEach((p,i)=>ex.push(i?exBank(p,pool):exBankEn(p,pool)));
   pick(words,3).forEach(w=>ex.push(exType(w)));fills.forEach(f=>ex.push(exFill(f)));
+  if(speakOK())pick(sayable(words),nSay()).forEach(w=>ex.push(exSay(w)));
   pick(words.filter(w=>!/\s/.test(w.vi)),2).forEach(w=>ex.push(exToneID(disp(w))));if(au)pick(pool,2).forEach(p=>ex.push(exListen(p,pool)));
   return shuffle(ex)}
  // unit check: no intros, harder mix including earlier units
@@ -478,6 +484,15 @@ function showQ(){progress();if(L.i>=L.q.length)return L.story?storyEnd():finish(
   <div class="tonechips">${w.split(" ").map(s=>`<span class="tchip">${esc(s)}: ${toneOf(s)}</span>`).join("")}</div><div class="row">${speakerBtn(w,"mid")}<button class="spk" data-slow="${esc(w)}" aria-label="Play slowly">${I.slow}</button></div></div>`;
   b.innerHTML=h;bindSay(b);setTimeout(()=>say(w),200);
   footer(`<button class="btn" id="cont">Got it</button>`);$("#cont").onclick=()=>{srsSeen(it);save();L.i++;showQ()};return}
+ if(q.type==="say"){const t=toneByName(q.tn);let best=0;
+  b.innerHTML=`<p class="qtitle">Say it</p><div class="prompt">${mascot("happy")}<div class="bubble">${speakerBtn(q.show)}<span style="font-size:1.7rem">${esc(q.show)}</span></div></div><p class="hint">Listen first, then say it. Watch your pitch line follow the ${esc(t.name)} shape.</p><div id="sayBox"></div>`;
+  bindSay(b);setTimeout(()=>say(q.show),200);
+  const done=()=>{L.answered++;if(best>=2){L.right++;L.combo++}progress();L.i++;showQ()};
+  const foot=()=>footer(`${best?"":`<button class="btn ghost skip" id="nospeak">Can't speak now</button>`}<button class="btn" id="cont" ${best?"":"disabled"}>Continue</button>`,best===3?"ok":"");
+  foot();
+  PITCH.inline($("#sayBox"),{tone:t,tones:TONES,esc,south:S.set.dialect==="S",onScore:st=>{S.cnt.mirror=(S.cnt.mirror||0)+1;if(st===3)fx("ok");best=Math.max(best,st);save();foot();bind()}});
+  const bind=()=>{$("#cont").onclick=done;const ns=$("#nospeak");if(ns)ns.onclick=()=>{S.noSpeakUntil=Date.now()+15*MIN;save();L.q=L.q.filter((x,j)=>j<L.i||x.type!=="say");L.total=L.answered+L.q.slice(L.i).filter(x=>x.type!=="intro"&&x.type!=="tone-intro").length;toast(I.mic,"Speaking is off for 15 minutes.");showQ()}};
+  bind();return}
  h=`${isNew?`<p class="qnew">${I.star}New word</p>`:""}<p class="qtitle">${esc(q.title)}</p>`;
  if(q.type==="mc"){h+=`<div class="prompt">${mascot("happy","",)}<div class="bubble">${q.audio?speakerBtn(q.audio):""}<span>${esc(q.show)}</span></div></div>
   <div class="opts ${q.grid||q.opts.every(o=>o.length<14)?"two":""}">${q.opts.map((o,k)=>optHtml(o,k)).join("")}</div>${q.tone?`<p class="hint">Look at the mark on the vowel. No mark means ngang.</p>`:""}`;
@@ -626,14 +641,15 @@ function streakSheet(){sheet(`<div class="streakbig" style="color:var(--gold)">$
 function onboarding(){let step=0;const o=document.createElement("div");o.className="onb";document.body.appendChild(o);
  const pickRow=(id,ic,b,s,on)=>`<button class="pickcard" data-pick="${id}" aria-pressed="${on}"><span class="ic">${ic}</span><span><b>${b}</b><span>${s}</span></span></button>`;
  let level="new";
- const draw=()=>{const dots=`<div class="dots">${[0,1,2,3].map(i=>`<i class="${i===step?"on":""}"></i>`).join("")}</div>`;
+ const draw=()=>{const dots=`<div class="dots">${[0,1,2,3,4].map(i=>`<i class="${i===step?"on":""}"></i>`).join("")}</div>`;
   if(step===0)o.innerHTML=`<div class="in"><div class="hero">${mascot("happy","bob")}<h1>Nhím</h1><p style="font-size:1.15rem">Learn Vietnamese in a few minutes a day. Tones first, family words early, and the Vietnamese your family speaks.</p></div><button class="btn" id="nx">Get started</button>${dots}</div>`;
   if(step===1)o.innerHTML=`<div class="in"><h2>Which Vietnamese do you hear at home?</h2><p class="muted">Nhím shows these words first. Both are always accepted.</p>${pickRow("S","N","Southern","Sài Gòn, the Mekong Delta, and most Viet families in Orange County",S.set.dialect==="S")}${pickRow("N","B","Northern","Hà Nội and the North",S.set.dialect==="N")}<button class="btn" id="nx">Continue</button>${dots}</div>`;
   if(step===2)o.innerHTML=`<div class="in"><h2>How much Vietnamese do you know?</h2>${pickRow("new","1","I'm new","Start from the six tones",level==="new")}${pickRow("some","2","I understand some, but can't read it","Skip ahead to Unit 3",level==="some")}${pickRow("more","3","I can read a little","Skip ahead to Unit 5",level==="more")}<button class="btn" id="nx">Continue</button>${dots}</div>`;
-  if(step===3)o.innerHTML=`<div class="in"><h2>Pick a daily goal</h2><p class="muted">A lesson is about 10 XP and 3 to 5 minutes.</p>${[[10,"Casual","1 lesson a day"],[20,"Regular","2 lessons a day"],[30,"Serious","3 lessons a day"],[50,"Intense","5 lessons a day"]].map(([n,b,s])=>pickRow(n,n,b,s,S.goal===n)).join("")}<button class="btn" id="nx">Start learning</button>${dots}</div>`;
+  if(step===3)o.innerHTML=`<div class="in"><h2>What do you want most?</h2><p class="muted">Nhím mixes in more of what you pick. You get everything either way.</p>${pickRow("speak",I.mic,"Speak with my family","More saying words out loud and listening",S.focus==="speak")}${pickRow("read",I.keyb,"Read and write","More typing and spelling",S.focus==="read")}${pickRow("all",I.star,"A bit of everything","An even mix",(S.focus||"all")==="all")}<button class="btn" id="nx">Continue</button>${dots}</div>`;
+  if(step===4)o.innerHTML=`<div class="in"><h2>Pick a daily goal</h2><p class="muted">A lesson is about 10 XP and 3 to 5 minutes.</p>${[[10,"Casual","1 lesson a day"],[20,"Regular","2 lessons a day"],[30,"Serious","3 lessons a day"],[50,"Intense","5 lessons a day"]].map(([n,b,s])=>pickRow(n,n,b,s,S.goal===n)).join("")}<button class="btn" id="nx">Start learning</button>${dots}</div>`;
   $$("[data-pick]",o).forEach(b=>b.onclick=()=>{$$("[data-pick]",o).forEach(x=>x.setAttribute("aria-pressed","false"));b.setAttribute("aria-pressed","true");const v=b.dataset.pick;
-   if(step===1)S.set.dialect=v;if(step===2)level=v;if(step===3)S.goal=+v;fx("tap")});
-  $("#nx",o).onclick=()=>{if(step<3){step++;draw();return}
+   if(step===1)S.set.dialect=v;if(step===2)level=v;if(step===3)S.focus=v;if(step===4)S.goal=+v;fx("tap")});
+  $("#nx",o).onclick=()=>{if(step<4){step++;draw();return}
    if(level!=="new"){const upto=level==="some"?2:4;ORDER.forEach(k=>{const u=+k.split(":")[0];if(u<upto)S.done[k]=1})}
    S.onb=true;save();o.remove();render();if(level!=="new")toast(I.star,`Unit ${level==="some"?3:5} is open. Earlier units stay open for review.`)}};
  draw()}

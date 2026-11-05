@@ -140,5 +140,46 @@ function open(opts){
  };
  setTone(0);
 }
-window.PITCH={supported,open,_test:{score,targetAt,clean}};
+/* ------------- compact version for a lesson step ------------- */
+function graph(tone,user,live){
+ let u="";
+ if(user&&user.length){
+  if(live)u=user.map(p=>`<circle cx="${X(p.x).toFixed(1)}" cy="${Y(p.y).toFixed(1)}" r="2.6" fill="var(--lotus)"/>`).join("");
+  else{let d="";user.forEach((p,i)=>{d+=(i===0||p.gap?"M":"L")+X(p.x).toFixed(1)+" "+Y(p.y).toFixed(1)});u=`<path d="${d}" fill="none" stroke="var(--lotus)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" class="uline"/>`}}
+ return UI.contour(tone,{w:W,h:H,color:"var(--indigo)"}).replace("</svg>",u+"</svg>");
+}
+function getRef(){try{const v=parseFloat(localStorage.getItem("nhim-pitch-ref"));return isFinite(v)?v:null}catch(e){return null}}
+function setRef(v){try{localStorage.setItem("nhim-pitch-ref",v.toFixed(2))}catch(e){}}
+/* records one try; calls onLive with dots while listening; returns cleaned points or null */
+async function capture(onLive){
+ ensureCtx();await openMic();
+ const ref=getRef(),frames=[],live=[],t0=performance.now();let lastVoice=0,heard=false;
+ await new Promise(done=>{const iv=setInterval(()=>{const t=performance.now()-t0,{hz}=pitchNow();frames.push({t,hz});
+  if(hz){heard=true;lastVoice=t;live.push({x:Math.min(1,t/REC_MS),y:3+(st(hz)-(ref??st(hz)))/ST_PER_LEVEL})}
+  if(live.length%3===0)onLive&&onLive(live);
+  if(t>REC_MS||(heard&&t-lastVoice>SILENCE_MS&&t>500)){clearInterval(iv);done()}},25)});
+ releaseMic();
+ const c=clean(frames,ref);if(!c||c.dur<120)return null;
+ setRef(ref==null?c.median:ref*.8+c.median*.2);return c;
+}
+function judge(tone,tones,pts,south){
+ let r=score(tone,pts);
+ if(south&&(tone.name==="hỏi"||tone.name==="ngã")){const other=tones.find(t=>t.name===(tone.name==="hỏi"?"ngã":"hỏi")),r2=score(other,pts);if(r2.stars>r.stars){r=r2;r.merged=other.name}}
+ r.tip=r.merged&&r.stars===3?`That was the ${r.merged} shape. In the South, hỏi and ngã sound alike, so it counts.`:advice(tone,r);
+ return r;
+}
+function inline(el,o){
+ const {I}=UI,tone=o.tone,esc=o.esc;let busy=false;
+ el.innerHTML=`<div class="mgraph">${graph(tone)}</div><div class="mlegend"><span><i class="lg t"></i>Target: ${esc(tone.name)}</span><span><i class="lg u"></i>You</span></div>
+  <div class="irow"><button class="micbtn" aria-label="Record">${I.mic}</button><span class="muted istat">Tap the mic and say it.</span></div><div class="mres" aria-live="polite"></div>`;
+ const g=el.querySelector(".mgraph"),btn=el.querySelector(".micbtn"),stat=el.querySelector(".istat"),res=el.querySelector(".mres");
+ btn.onclick=async()=>{if(busy)return;busy=true;btn.classList.add("on");stat.textContent="Listening…";res.innerHTML="";
+  let c=null;try{c=await capture(l=>{g.innerHTML=graph(tone,l,true)})}catch(e){busy=false;btn.classList.remove("on");stat.textContent="Allow the microphone, or tap \"Can't speak now\".";return}
+  busy=false;btn.classList.remove("on");
+  if(!c){g.innerHTML=graph(tone);stat.textContent="I couldn't hear you. Try again, a bit louder.";return}
+  g.innerHTML=graph(tone,c.pts,false);const r=judge(tone,o.tones,c.pts,o.south);
+  res.innerHTML=`<div class="mstars" aria-label="${r.stars} of 3">${[1,2,3].map(i=>`<i class="${i<=r.stars?"on":""}">${I.star}</i>`).join("")}</div><p class="muted">${esc(r.tip)}</p>`;
+  stat.textContent="Tap to try again.";o.onScore&&o.onScore(r.stars)};
+}
+window.PITCH={supported,open,inline,_test:{score,targetAt,clean}};
 })();

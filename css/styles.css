@@ -481,3 +481,7 @@ kbd.big{font-size:1.2rem}
 .vpack{margin-top:18px}
 .vpack .row{gap:8px}
 .vpack .btn{flex:1;min-width:150px;cursor:pointer}
+
+.irow{display:flex;align-items:center;gap:14px;margin-top:10px}
+.irow .micbtn{width:60px;height:60px}
+.irow .micbtn svg{width:26px;height:26px}

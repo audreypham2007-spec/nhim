@@ -495,3 +495,15 @@ kbd.big{font-size:1.2rem}
 .cme{display:flex;justify-content:flex-end;min-height:0;padding:10px 14px}
 .cme:empty{display:none}
 .cbub.me{background:var(--leaf);color:#fff;border-radius:18px 18px 4px 18px}
+
+/* ---------- talk to family ---------- */
+.talkgrid{display:flex;flex-direction:column;gap:8px}
+.talkcard{display:flex;align-items:center;gap:12px;text-align:left;border:2px solid var(--rule);border-radius:var(--r-m);background:var(--page);padding:10px 12px;box-shadow:0 3px 0 var(--rule)}
+.talkcard .ava{width:48px;height:48px;flex:none}
+.talkcard>span:nth-child(2){flex:1;display:flex;flex-direction:column}
+.tstars{display:flex;gap:2px}.tstars i{width:18px;height:18px;color:var(--locked)}.tstars i.on{color:var(--gold)}.tstars svg{width:100%;height:100%}
+.warm{flex:1;display:flex;align-items:center;gap:8px;color:var(--lotus)}
+.warm svg{width:24px;height:24px}
+.warm .pbar{flex:1}
+.warm .pbar i{background:var(--lotus)}
+.kopt{text-align:left}

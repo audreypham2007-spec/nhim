@@ -366,11 +366,18 @@ function startPractice(kind){const q=buildPractice(kind);if(!q.length)return toa
 
 /* ----- stories list ----- */
 function renderStories(v){
+ S.talks=S.talks||{};
  v.innerHTML=`<header><h1 style="font-size:2rem">Stories</h1><p class="muted">Short conversations. Tap any word to see what it means.</p></header>
+ <section class="panel talkpanel"><div class="spread"><h2>Talk to family</h2><span class="muted small">You choose what to say</span></div><p class="muted small">In Vietnamese, "I" and "you" change with who you're talking to. Pick your words and see how your relatives react.</p>
+ <div class="talkgrid">${TALK.TALKS.map(t=>`<button class="talkcard" data-talk="${t.id}">${UI.avatar(t.who,t.kind)}<span><b>${esc(t.title)}</b><span class="muted small">${esc(t.vi)}</span></span><span class="tstars">${[1,2,3].map(k=>`<i class="${k<=(S.talks[t.id]||0)?"on":""}">${I.star}</i>`).join("")}</span></button>`).join("")}</div></section>
  <div class="storygrid">${[...STORIES].sort((a,b)=>UNITS.findIndex(u=>u.id===a.unit)-UNITS.findIndex(u=>u.id===b.unit)).map(st=>{const ui=UNITS.findIndex(u=>u.id===st.unit),key=ui+":s",op=unlocked(key),done=!!S.stories[st.id],col=UNITS[ui]?.color||"var(--leaf)";
   return `<button class="scard ${op?"":"locked"}" data-story="${st.id}" style="--sc:${col}"><span class="cover">${op?mascotStory(st):I.lock}${done?`<span class="tick">${I.check}</span>`:""}</span><b>${esc(st.title)}</b><span>${esc(st.vi)}${op?"":` · after Unit ${ui+1} phrases`}</span></button>`}).join("")}</div>`;
  $$("[data-story]",v).forEach(b=>b.onclick=()=>{const st=STORIES.find(s=>s.id===b.dataset.story),ui=UNITS.findIndex(u=>u.id===st.unit);
-  if(!unlocked(ui+":s"))return toast(I.lock,`Unlocks after the Phrases lesson in Unit ${ui+1}.`);startStory(st,ui+":s")})}
+  if(!unlocked(ui+":s"))return toast(I.lock,`Unlocks after the Phrases lesson in Unit ${ui+1}.`);startStory(st,ui+":s")});
+ $$("[data-talk]",v).forEach(b=>b.onclick=()=>TALK.open({id:b.dataset.talk,esc,say,name:S.name,
+  onPick:q=>fx(q==="oops"?"bad":"ok"),
+  onEnd:st=>{const id=b.dataset.talk,first=!S.talks[id];S.talks[id]=Math.max(S.talks[id]||0,st);addXp(first?10:3);questProg("story",1);fx("done");if(st===3)confetti();save()},
+  onClose:()=>render()}))}
 function mascotStory(st){const names=Object.entries(st.cast||{}).slice(0,2);return `<span style="display:flex">${names.map(([k,n],i)=>avatar(n,k).replace('class="ava"',`class="ava" style="width:56px;height:56px;${i?"margin-left:-14px":""}"`)).join("")}</span>`}
 
 /* ----- guide ----- */

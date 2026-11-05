@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>About Nhím</title>
+<meta name="description" content="Why Nhím exists: a Vietnamese learning app built for heritage speakers, with tones first, family voices, and real family conversations. Made by Audrey Pham.">
+<meta name="author" content="Audrey Pham">
+<meta name="theme-color" content="#F1E8D6">
+<meta property="og:title" content="About Nhím">
+<meta property="og:description" content="A Vietnamese learning app built for heritage speakers. Tones first, family voices, and the Vietnamese your family speaks.">
+<meta property="og:image" content="https://audreypham2007-spec.github.io/nhim/preview.png">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap&subset=vietnamese">
+<link rel="stylesheet" href="css/styles.css">
+<style>
+.about{max-width:720px;margin:0 auto;padding:28px var(--side-r) 60px var(--side);display:flex;flex-direction:column;gap:22px}
+.ahero{display:flex;gap:18px;align-items:center}
+.ahero img{width:88px;height:88px;flex:none}
+.ahero h1{font-size:2.6rem;color:var(--leaf)}
+.ahero p{font-size:1.1rem;color:var(--ink-2);font-weight:600}
+.about h2{font-size:1.5rem}
+.about p,.about li{font-size:1.05rem;line-height:1.6}
+.about ul{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px}
+.tones{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.tones div{background:var(--page);border-radius:var(--r-s);padding:8px 10px;text-align:center}
+.tones b{display:block;font-family:var(--display);font-size:1.6rem}
+.feat{display:grid;grid-template-columns:1fr;gap:10px}
+@media (min-width:620px){.feat{grid-template-columns:1fr 1fr}}
+.feat div{background:var(--page);border-radius:var(--r-m);padding:12px 14px}
+.feat b{display:block;font-family:var(--display);font-size:1.15rem;color:var(--leaf)}
+.cta{display:flex;gap:10px;flex-wrap:wrap}
+.cta .btn{flex:1;min-width:200px;text-decoration:none}
+.foot{color:var(--ink-2);font-size:.9rem;text-align:center}
+</style>
+</head>
+<body>
+<main class="about">
+ <header class="ahero"><img src="icon.svg" alt=""><div><h1>Nhím</h1><p>A Vietnamese learning app for people whose family already speaks it.</p></div></header>
+
+ <section class="panel">
+  <h2>Why I built it</h2>
+  <p>I'm Audrey Pham, a Communication Sciences and Disorders student at California State University, Fullerton. I study speech-language pathology, and I care about bilingual speakers.</p>
+  <p>Many Vietnamese American students understand Vietnamese at home but can't read it, write it, or say it back with confidence. Most apps aren't built for them. They teach one accent, treat tones as a footnote, and never mention that "I" and "you" change depending on who you're talking to.</p>
+  <p>Nhím (Vietnamese for "hedgehog") is built for them first.</p>
+ </section>
+
+ <section class="panel">
+  <h2>Tones come first</h2>
+  <p>Vietnamese has six tones. Change the pitch and you change the word:</p>
+  <div class="tones"><div><b>ma</b>ghost</div><div><b>má</b>mother</div><div><b>mà</b>but</div><div><b>mả</b>grave</div><div><b>mã</b>horse</div><div><b>mạ</b>rice seedling</div></div>
+  <p>Nhím draws every tone as a pitch line. With the <b>tone mirror</b>, you say a word into your microphone and see your own pitch line on top of the target. It scores the shape of the line, so a high or low voice is treated the same.</p>
+ </section>
+
+ <section class="panel">
+  <h2>Built around family</h2>
+  <div class="feat">
+   <div><b>Family voices</b>A parent or grandparent records words, and Nhím plays their voice instead of a computer voice.</div>
+   <div><b>Talk to family</b>Conversations with Bà, Ông, and a friend's mom where your pronouns and politeness change how they react.</div>
+   <div><b>Family chat</b>Read texts the way families send them, without accent marks ("con an com chua"), and reply.</div>
+   <div><b>North and South</b>Both are always accepted. In Southern mode, hỏi and ngã count as the same tone, because they sound the same.</div>
+   <div><b>Type Vietnamese</b>A built-in Telex trainer, because many heritage speakers have never typed the language.</div>
+   <div><b>16 units, 16 stories</b>From greetings and family words to Tết, with a tap-through family tree for pronouns.</div>
+  </div>
+ </section>
+
+ <section class="panel">
+  <h2>What's next: a study</h2>
+  <p>I plan to run a small study with Vietnamese American heritage speakers: a tone listening test before and after four weeks of using Nhím, to see whether seeing pitch helps people hear and say the tones.</p>
+  <p>Native speaker review of the Vietnamese content is always welcome. You can open an issue on GitHub.</p>
+ </section>
+
+ <section class="panel">
+  <h2>Private by design</h2>
+  <ul>
+   <li>No accounts, no ads, no tracking.</li>
+   <li>Progress and family recordings stay in your browser. Nothing is uploaded.</li>
+   <li>The tone mirror listens only while you tap the mic. Nothing is recorded or saved.</li>
+  </ul>
+ </section>
+
+ <div class="cta"><a class="btn" href="./">Start learning</a><a class="btn ghost" href="https://github.com/audreypham2007-spec/nhim">Source code</a></div>
+ <p class="foot">Made by Audrey Pham. Built with AI coding assistance (Claude).</p>
+</main>
+</body>
+</html>

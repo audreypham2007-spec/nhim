@@ -2,7 +2,7 @@
 
 Learn Vietnamese in short, game-like lessons. Nhím (Vietnamese for "hedgehog") is the mascot.
 
-**Try it:** https://audreypham2007-spec.github.io/nhim/
+**Try it:** https://audreypham2007-spec.github.io/nhim/ · [About Nhím](https://audreypham2007-spec.github.io/nhim/about.html)
 
 Made by Audrey Pham, Communication Sciences and Disorders, California State University, Fullerton.
 

@@ -258,7 +258,7 @@ function renderLearn(v){
    h+=`<div class="stop" style="left:${p.x/4}%;top:${p.y}px">${isCur?`<span class="startflag">${S.done[ORDER[0]]?"Tiếp tục":"Bắt đầu"}</span>`:""}<button class="${cls}" data-key="${p.key}" aria-label="${esc(p.l.name)}${done?", finished":op?"":", locked"}">${icon}</button><span class="lbl">${esc(p.l.name)}</span></div>`;
    if(isCur){const side=p.x<=200?1:-1;h+=`<div class="walker" style="left:calc(${p.x/4}% + ${side*96}px);top:${p.y-6}px">${mascot("happy","bob")}</div>`}});
   h+=`</div></section>`});
- h+=`<p class="endnote">More units are on the way. Made by Audrey Pham. <a href="https://github.com/audreypham2007-spec/nhim">Source code</a></p>`;
+ h+=`<p class="endnote">More units are on the way. Made by Audrey Pham. <a href="about.html">About Nhím</a> · <a href="https://github.com/audreypham2007-spec/nhim">Source code</a></p>`;
  v.innerHTML=h;
  $$(".node",v).forEach(b=>b.onclick=()=>openNode(b.dataset.key));
  $$("[data-tip]",v).forEach(b=>b.onclick=()=>tipSheet(+b.dataset.tip));
@@ -451,7 +451,7 @@ function renderProfile(v){
  </section>
  <section class="panel"><h2>Your data</h2><p class="muted small">Progress saves in this browser only. Download a backup to move it to another device.</p>
   <div class="row"><button class="btn ghost slim" id="exp">${I.down.replace("<svg",'<svg style="width:20px;height:20px"')}Download backup</button><button class="btn ghost slim" id="imp">${I.up.replace("<svg",'<svg style="width:20px;height:20px"')}Restore backup</button><input type="file" id="impf" accept="application/json" hidden></div>
-  <button class="btn ghost slim" id="reset" style="color:var(--bad);align-self:flex-start">Reset all progress</button></section>
+  <button class="btn ghost slim" id="reset" style="color:var(--bad);align-self:flex-start">Reset all progress</button><a href="about.html" style="align-self:flex-start;font-weight:700">About Nhím and why it exists</a></section>
  <section class="panel"><h2>About Nhím</h2><p>Nhím means hedgehog. This course teaches Vietnamese the way heritage learners need it: tones first, family words early, and both Northern and Southern forms. ${UNITS.length} units, ${ALL_WORDS.length} words, ${UNITS.reduce((a,u)=>a+u.phrases.length,0)} sentences, and ${STORIES.length} stories.</p><p class="muted small">Made by Audrey Pham, Communication Sciences and Disorders, Cal State Fullerton. <a href="https://github.com/audreypham2007-spec/nhim">Source code on GitHub</a>.</p></section>`;
  $("#nm",v).onchange=e=>{S.name=e.target.value.trim();save()};
  $$("[data-set]",v).forEach(g=>$$("button",g).forEach(b=>b.onclick=()=>{const k=g.dataset.set,val=b.dataset.v;

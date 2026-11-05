@@ -56,7 +56,7 @@ window.NHIM = {
       ]
     },
 
-    { id:"u3", title:"Numbers", vi:"Số đếm", color:"#C23B5E", scene:"market",
+    { id:"u3", title:"Numbers", vi:"Số đếm", color:"#C0432F", scene:"market",
       tip:"After mười or mươi, năm (5) becomes lăm: mười lăm = 15. After mươi, một (1) becomes mốt: hai mươi mốt = 21. Năm also means year. Nghìn (North) and ngàn (South) both mean thousand.",
       words:[
         ["một","one (1)"],["hai","two (2)"],["ba","three (3)"],["bốn","four (4)"],["năm","five (5)"],
@@ -96,7 +96,7 @@ window.NHIM = {
       ]
     },
 
-    { id:"u5", title:"Questions", vi:"Câu hỏi", color:"#7A4E9E", scene:"city",
+    { id:"u5", title:"Questions", vi:"Câu hỏi", color:"#5B3A29", scene:"city",
       tip:"Add không? at the end to make a yes or no question: Bạn có hiểu không? Answer có (yes) or không (no). Question words often go at the end: Bạn đi đâu?",
       words:[
         ["gì","what"],["ai","who"],["ở đâu","where"],["khi nào","when"],["tại sao","why",["sao"]],
@@ -158,7 +158,7 @@ window.NHIM = {
       ]
     },
 
-    { id:"u8", title:"Colors", vi:"Màu sắc", color:"#C23B5E", scene:"terraces",
+    { id:"u8", title:"Colors", vi:"Màu sắc", color:"#C0432F", scene:"terraces",
       tip:"Xanh alone can mean blue or green. Add dương (ocean) for blue or lá (leaf) for green. Vàng means yellow and also gold. Southerners often say bông for hoa (flower).",
       words:[
         ["màu","color"],["đỏ","red"],["vàng","yellow"],["xanh dương","blue"],["xanh lá","green"],
@@ -237,7 +237,7 @@ window.NHIM = {
       ]
     },
 
-    { id:"u12", title:"Weather and seasons", vi:"Thời tiết", color:"#7A4E9E", scene:"mountains",
+    { id:"u12", title:"Weather and seasons", vi:"Thời tiết", color:"#5B3A29", scene:"mountains",
       tip:"Trời means sky, and weather sentences start with it: Trời nóng = It's hot. Mùa means season. Southern Vietnam has two seasons, mùa mưa (rainy) and mùa khô (dry).",
       words:[
         ["trời","sky, weather"],["nóng","hot"],["lạnh","cold"],["mưa","rain"],["nắng","sunny"],
@@ -298,7 +298,7 @@ window.NHIM = {
       ]
     },
 
-    { id:"u15", title:"At home", vi:"Ở nhà", color:"#C23B5E", scene:"home",
+    { id:"u15", title:"At home", vi:"Ở nhà", color:"#C0432F", scene:"home",
       tip:"Phòng means room: phòng ngủ (bedroom), phòng tắm (bathroom), phòng khách (living room). Rửa bát (North) and rửa chén (South) both mean wash the dishes. Southerners say trên lầu for upstairs.",
       words:[
         ["phòng khách","living room"],["phòng ngủ","bedroom"],["nhà bếp","kitchen",["bếp"]],["phòng tắm","bathroom"],

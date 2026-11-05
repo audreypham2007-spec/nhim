@@ -35,7 +35,7 @@ try{const t=JSON.parse(localStorage.getItem(KEY));if(t){S=Object.assign(fresh(),
   Object.keys(old.learned||{}).forEach(vi=>S.srs[vi]={s:1,due:Date.now(),r:1,w:0});}}}catch(e){}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 function applyTheme(){const t=S.set.theme;if(t==="auto")document.documentElement.removeAttribute("data-theme");else document.documentElement.dataset.theme=t;
- const m=$('meta[name="theme-color"]');if(m)m.content=getComputedStyle(document.documentElement).getPropertyValue("--page").trim()||"#EDF2EA"}
+ const m=$('meta[name="theme-color"]');if(m)m.content=getComputedStyle(document.documentElement).getPropertyValue("--page").trim()||"#F1E8D6"}
 
 function dailyRefresh(){if(S.last&&dayDiff(S.last,today())>1)S.streak=0;ensureQuests();save()}
 function addXp(n){S.xp+=n;const t=today();S.daily[t]=(S.daily[t]||0)+n;let extended=false;
@@ -231,7 +231,7 @@ function renderLearn(v){
  else if(dueItems().length>=8)msg=`<b>${dueItems().length} words</b> are fading. A quick review in Practice keeps them fresh.`;
  else msg=`<b>${S.goal-g} XP</b> to today's goal.${S.streak?` Your streak is ${S.streak} ${S.streak===1?"day":"days"}.`:""}`;
  let h=`<div class="hello">${mascot(g>=S.goal?"cheer":"happy","bob")}<p class="speech">${msg}</p></div>`;
- const sections=[{ui:-1,title:"The six tones",vi:"Thanh điệu",color:"#C23B5E",scene:"lanterns"},...UNITS.map((u,ui)=>({ui,...u}))];
+ const sections=[{ui:-1,title:"The six tones",vi:"Thanh điệu",color:"#C0432F",scene:"lanterns"},...UNITS.map((u,ui)=>({ui,...u}))];
  sections.forEach(sec=>{const ui=sec.ui,L=lessonsOf(ui),open=unlocked(ui+":"+L[0].k),[d,t]=unitProgress(ui);
   const n=ui===-1?"Start here":"Unit "+(ui+1);
   h+=`<section class="unit" style="--u:${sec.color}" id="unit-${ui}"><div class="ubanner ${open?"":"locked"}">${scene(sec.scene)}<div class="t"><span class="num">${n}</span><h2>${esc(sec.title)}</h2><span class="vi">${esc(sec.vi)}</span>

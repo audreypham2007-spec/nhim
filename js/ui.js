@@ -107,7 +107,7 @@ function animateDot(svgEl,tone,ms=900){
 }
 
 /* ---------- story characters: simple faces, colors picked from the name ---------- */
-const SKIN=["#F1D3B3","#E8C29E","#D9A87E","#C68F64"],HAIR=["#2A1A10","#3B2618","#1C1C24","#5A3A22"],TOPS=["#2B3A67","#C23B5E","#1F6B4F","#B7791F","#2C7A7B","#7A4E9E"];
+const SKIN=["#F1D3B3","#E8C29E","#D9A87E","#C68F64"],HAIR=["#2A1A10","#3B2618","#1C1C24","#5A3A22"],TOPS=["#2B3A67","#C0432F","#1F6B4F","#B7791F","#2C7A7B","#5B3A29"];
 function hashStr(s){let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))|0;return Math.abs(h)}
 function avatar(name,kind){
  const h=hashStr(name),skin=SKIN[h%4],hair=HAIR[(h>>3)%4],top=TOPS[(h>>5)%6];
@@ -145,7 +145,7 @@ function sfx(kind){try{ac=ac||new (window.AudioContext||window.webkitAudioContex
 function confetti(){if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;
  const c=document.createElement("canvas");c.id="confetti";document.body.appendChild(c);const x=c.getContext("2d");
  const dpr=devicePixelRatio||1;c.width=innerWidth*dpr;c.height=innerHeight*dpr;x.scale(dpr,dpr);
- const cols=["#1F6B4F","#C23B5E","#E2A72E","#2B3A67","#2C7A7B","#7A4E9E"];
+ const cols=["#1F6B4F","#C0432F","#E0A12A","#2B3A67","#2C7A7B","#5B3A29"];
  const P=[...Array(140)].map(()=>({x:innerWidth/2+(Math.random()-.5)*80,y:innerHeight*.35,vx:(Math.random()-.5)*12,vy:-Math.random()*13-4,r:Math.random()*Math.PI,vr:(Math.random()-.5)*.3,w:6+Math.random()*7,h:4+Math.random()*5,c:cols[Math.floor(Math.random()*6)]}));
  const t0=performance.now();
  (function f(t){x.clearRect(0,0,innerWidth,innerHeight);P.forEach(p=>{p.vy+=.35;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(-p.w/2,-p.h/2,p.w,p.h);x.restore()});

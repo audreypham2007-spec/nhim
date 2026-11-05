@@ -1,37 +1,43 @@
-/* Nhím v2
-   Palette from Đông Hồ folk prints: banana-leaf green, indigo (chàm), lotus pink, sophora yellow (vàng hoè), on a pale celadon page.
+/* Nhím v3
+   Look: Đông Hồ folk woodblock prints. Light mode is điệp paper (warm, grainy, made with crushed seashell),
+   printed in the old pigments: chàm green, indigo, sỏi son red, hoa hoè yellow. Dark mode is sơn mài lacquer: near-black with gold.
    Layout: phone-first column. At 1024px+ a left nav rail and a right column for streak, goal and quests. */
 :root{
-  --page:#EDF2EA; --paper:#FBFCF8; --ink:#17231F; --ink-2:#4F6159; --rule:#D3DED4; --rule-2:#BFCDC2;
-  --leaf:#1F6B4F; --leaf-deep:#134A36; --leaf-tint:#DCEDE2;
-  --indigo:#2B3A67; --indigo-tint:#E0E4F1;
-  --lotus:#C23B5E; --lotus-tint:#F8E0E7;
-  --gold:#E2A72E; --gold-deep:#A87610; --gold-tint:#FBEED0;
-  --ok:#2B8A57; --ok-tint:#DCF2E4; --bad:#C2413A; --bad-tint:#FADFDC;
-  --locked:#C8D2CB; --locked-deep:#AAB7AE;
+  --page:#F1E8D6; --paper:#FBF6EA; --ink:#1F1A15; --ink-2:#62574A; --rule:#E2D5BC; --rule-2:#CDBC9D;
+  --leaf:#1F6B4F; --leaf-deep:#134A36; --leaf-tint:#DDE9D6;
+  --indigo:#2B3A67; --indigo-tint:#E4E2EC;
+  --lotus:#C0432F; --lotus-tint:#F6DDD3;
+  --gold:#E0A12A; --gold-deep:#A06F0E; --gold-tint:#F8E8C4;
+  --ok:#2B8A57; --ok-tint:#DCEFD9; --bad:#B83A2E; --bad-tint:#F7DCD5;
+  --locked:#DCD0B9; --locked-deep:#C1B193;
   --quill:#7A4E2D; --quill-2:#A8744A; --face:#F5DEC0; --hat:#E7C27A; --hat-line:#B88A3E;
   --display:"Baloo 2","Be Vietnam Pro",system-ui,sans-serif;
   --body:"Be Vietnam Pro","Segoe UI",system-ui,-apple-system,sans-serif;
   --r-s:10px; --r-m:16px; --r-l:22px;
   --side:max(16px,env(safe-area-inset-left,0px)); --side-r:max(16px,env(safe-area-inset-right,0px));
+  --grain-light:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .42 0 0 0 0 .31 0 0 0 0 .18 0 0 0 .5 -.18'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E");
+  --grain-dark:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .9 0 0 0 0 .7 0 0 0 0 .3 0 0 0 .9 -.62'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E");
+  --grain:var(--grain-light);
   color-scheme:light;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --page:#0E1714; --paper:#15211D; --ink:#E5EFE9; --ink-2:#9CB2A7; --rule:#26372F; --rule-2:#33473E;
-  --leaf:#3FB88E; --leaf-deep:#25876A; --leaf-tint:#173A2E; --indigo:#8FA2E0; --indigo-tint:#1D2440;
-  --lotus:#EE7C9C; --lotus-tint:#3A1B26; --gold:#F0BE52; --gold-deep:#B4831F; --gold-tint:#3A2F15;
-  --ok:#57C78B; --ok-tint:#14331F; --bad:#F07B71; --bad-tint:#3B1C19; --locked:#2E3F38; --locked-deep:#22302A;
-  --quill:#B07A4E; --quill-2:#D29A68; --face:#E9CFAE; color-scheme:dark}}
+  --page:#14100C; --paper:#1F1914; --ink:#F2E8D5; --ink-2:#B5A48A; --rule:#372C22; --rule-2:#483A2C;
+  --leaf:#49B98C; --leaf-deep:#2A8665; --leaf-tint:#1B2E22; --indigo:#9DA9E0; --indigo-tint:#22233A;
+  --lotus:#E97A5F; --lotus-tint:#3B1E16; --gold:#E8B550; --gold-deep:#B07F1F; --gold-tint:#3A2C14;
+  --ok:#5CC58E; --ok-tint:#16301F; --bad:#EE7C68; --bad-tint:#3A1C16; --locked:#3A3027; --locked-deep:#2A221B;
+  --quill:#B07A4E; --quill-2:#D29A68; --face:#E9CFAE;
+  --grain:var(--grain-dark); color-scheme:dark}}
 :root[data-theme="dark"]{
-  --page:#0E1714; --paper:#15211D; --ink:#E5EFE9; --ink-2:#9CB2A7; --rule:#26372F; --rule-2:#33473E;
-  --leaf:#3FB88E; --leaf-deep:#25876A; --leaf-tint:#173A2E; --indigo:#8FA2E0; --indigo-tint:#1D2440;
-  --lotus:#EE7C9C; --lotus-tint:#3A1B26; --gold:#F0BE52; --gold-deep:#B4831F; --gold-tint:#3A2F15;
-  --ok:#57C78B; --ok-tint:#14331F; --bad:#F07B71; --bad-tint:#3B1C19; --locked:#2E3F38; --locked-deep:#22302A;
-  --quill:#B07A4E; --quill-2:#D29A68; --face:#E9CFAE; color-scheme:dark}
+  --page:#14100C; --paper:#1F1914; --ink:#F2E8D5; --ink-2:#B5A48A; --rule:#372C22; --rule-2:#483A2C;
+  --leaf:#49B98C; --leaf-deep:#2A8665; --leaf-tint:#1B2E22; --indigo:#9DA9E0; --indigo-tint:#22233A;
+  --lotus:#E97A5F; --lotus-tint:#3B1E16; --gold:#E8B550; --gold-deep:#B07F1F; --gold-tint:#3A2C14;
+  --ok:#5CC58E; --ok-tint:#16301F; --bad:#EE7C68; --bad-tint:#3A1C16; --locked:#3A3027; --locked-deep:#2A221B;
+  --quill:#B07A4E; --quill-2:#D29A68; --face:#E9CFAE;
+  --grain:var(--grain-dark); color-scheme:dark}
 
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%}
-body{background:var(--page);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased}
+body{background:var(--grain),var(--page);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased}
 button{font:inherit;color:inherit;cursor:pointer}
 a{color:var(--leaf)}
 :focus-visible{outline:3px solid var(--lotus);outline-offset:2px}
@@ -45,7 +51,7 @@ svg{display:block}
 .rail{display:none}
 .col{width:100%;max-width:600px;margin:0 auto;padding:0 var(--side-r) 110px var(--side)}
 .aside{display:none}
-.topbar{position:sticky;top:0;z-index:5;background:var(--page);display:flex;align-items:center;justify-content:space-between;gap:10px;
+.topbar{position:sticky;top:0;z-index:5;background:var(--grain),var(--page);display:flex;align-items:center;justify-content:space-between;gap:10px;
   padding:calc(10px + env(safe-area-inset-top,0px)) 0 10px;border-bottom:2px solid var(--rule)}
 .brand{display:flex;align-items:center;gap:6px;font-family:var(--display);font-weight:800;font-size:1.6rem;color:var(--leaf);letter-spacing:-.02em;text-decoration:none}
 .brand svg{width:38px;height:38px}
@@ -53,7 +59,7 @@ svg{display:block}
 .stat{display:flex;align-items:center;gap:4px;font-family:var(--display);font-weight:800;font-size:1.05rem;font-variant-numeric:tabular-nums;border:none;background:none;padding:6px 8px;border-radius:12px}
 .stat:hover{background:var(--paper)}
 .stat svg{width:24px;height:24px}
-.c-streak{color:var(--gold)} .c-streak.cold{color:var(--locked-deep)} .c-xp{color:var(--leaf)} .c-heart{color:var(--lotus)}
+.c-streak{color:var(--gold)} .c-streak.cold{color:var(--locked-deep)} .c-xp{color:var(--leaf)} 
 nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--paper);border-top:2px solid var(--rule);padding:6px var(--side-r) calc(6px + env(safe-area-inset-bottom,0px)) var(--side)}
 nav.tabs .in{max-width:600px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:2px}
 .tab{white-space:nowrap;background:none;border:2px solid transparent;border-radius:14px;padding:5px 2px;display:flex;flex-direction:column;align-items:center;gap:1px;font-size:.7rem;font-weight:700;color:var(--ink-2)}
@@ -419,10 +425,10 @@ body:has(.lesson) .toast{top:auto;bottom:calc(150px + env(safe-area-inset-bottom
 .mstars i{width:28px;height:28px;color:var(--locked)}.mstars i.on{color:var(--gold)}
 .mstars svg{width:100%;height:100%}
 .mfoot{display:flex;flex-direction:row!important;align-items:center;gap:14px}
-.micbtn{flex:none;width:72px;height:72px;border-radius:50%;border:none;background:var(--lotus);color:#fff;display:grid;place-items:center;box-shadow:0 5px 0 #8E2643}
+.micbtn{flex:none;width:72px;height:72px;border-radius:50%;border:none;background:var(--lotus);color:#fff;display:grid;place-items:center;box-shadow:0 5px 0 color-mix(in srgb,var(--lotus) 62%,#000)}
 .micbtn svg{width:32px;height:32px}
 .micbtn.on{animation:pulse 1s infinite}
-@keyframes pulse{0%{box-shadow:0 5px 0 #8E2643,0 0 0 0 rgba(194,59,94,.5)}100%{box-shadow:0 5px 0 #8E2643,0 0 0 18px rgba(194,59,94,0)}}
+@keyframes pulse{0%{box-shadow:0 5px 0 color-mix(in srgb,var(--lotus) 62%,#000),0 0 0 0 color-mix(in srgb,var(--lotus) 50%,transparent)}100%{box-shadow:0 5px 0 color-mix(in srgb,var(--lotus) 62%,#000),0 0 0 18px transparent}}
 
 /* ---------- Telex trainer ---------- */
 .tgoal{display:flex;align-items:center;gap:12px;margin-top:10px}
@@ -440,3 +446,17 @@ kbd.big{font-size:1.2rem}
 .tkeys{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin-top:10px;font-size:.9rem}
 .tkeys span{display:flex;gap:8px;align-items:center}
 .lfoot .fb{display:flex;flex-direction:column;gap:2px}
+
+/* ---------- woodblock details ---------- */
+/* printed edge: a hard ink outline and a slightly offset "second pass" shadow, like a block printed in two colors */
+.panel,.hubcard,.scard .cover,.hello .speech,.treeout,.mgraph,.tcheat{box-shadow:3px 4px 0 var(--rule)}
+.ubanner{border:2.5px solid color-mix(in srgb,var(--u) 55%,#1F1A15)}
+.ubanner.locked{border-color:var(--locked-deep)}
+/* a row of carved diamonds along the bottom of each unit banner */
+.ubanner::after{content:"";position:absolute;left:0;right:0;bottom:7px;height:7px;pointer-events:none;opacity:.35;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='7'%3E%3Cpath d='M7 0l5 3.5L7 7 2 3.5z' fill='%23fff'/%3E%3C/svg%3E") 0 0/14px 7px repeat-x}
+.ubanner.locked::after{opacity:.5;filter:invert(.6)}
+.ubanner .scene{opacity:.26;mix-blend-mode:screen}
+.node:not(.locked){border:2.5px solid color-mix(in srgb,var(--u) 50%,#1F1A15)}
+.node.done{border-color:color-mix(in srgb,var(--gold) 50%,#1F1A15)}
+.brand{text-shadow:2px 2px 0 color-mix(in srgb,var(--gold) 55%,transparent)}

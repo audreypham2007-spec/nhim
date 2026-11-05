@@ -21,8 +21,8 @@ Vietnamese has six tones. A change in pitch changes the word: ma (ghost), má (m
 I study speech-language pathology, and I care about bilingual speakers. Many Vietnamese American students understand Vietnamese at home but can't read or write it. Nhím is built for them:
 
 - It accepts both Northern and Southern words (vâng/dạ, bố/ba, mẹ/má, đắt/mắc) and shows the learner's home dialect first.
-- It teaches family pronouns early, with a tap-through family tree, because "I" and "you" depend on who you're talking to.
-- Heritage speakers can skip ahead during setup.
+- It teaches family pronouns early, with a tap-through family tree, because "I" and "you" depend on who you're talking to. Then you practice them in conversations with Bà, Ông, and a friend's mom, who react to your choices.
+- Heritage speakers can skip ahead during setup, and pick what they want most (speaking with family, or reading and writing). Nhím mixes in more of that.
 - It teaches Telex typing, because many heritage speakers can speak Vietnamese but have never typed it.
 - Family voices: a parent or grandparent records words and sentences, and Nhím plays their voice instead of the computer voice. You learn the Vietnamese your family actually speaks, in their accent.
 
@@ -35,8 +35,15 @@ I study speech-language pathology, and I care about bilingual speakers. Many Vie
 
 **Tone tools**
 - Each tone drawn as a pitch contour on a 5-level scale. A dot traces the line while the word plays.
-- Tone mirror: say a word into the microphone and see your pitch line next to the target. It scores the shape of the line, not how high your voice is, and gives a tip for each tone. It runs in the browser. Nothing is recorded or saved.
+- Tone mirror: say a word into the microphone and see your pitch line next to the target. A short "Say it" step also appears inside lessons.
+- Southern mode: hỏi and ngã sound the same in the South, so either answer counts in tone exercises and the tone mirror. It scores the shape of the line, not how high your voice is, and gives a tip for each tone. It runs in the browser. Nothing is recorded or saved.
 - A tone gym, and a tone mix-up chart in your profile that shows which tones you confuse with which.
+
+**Talk to family**
+- Branching conversations (a phone call with Bà ngoại, a friend's mom, Tết with Ông nội). Each choice is rated, the relative reacts, and a note explains why: tôi vs. con, bạn vs. bà, dạ and ạ, inviting elders to eat first, never asking how much lì xì is inside.
+
+**Family chat**
+- Read family texts the way they're really sent: no accent marks and shortcuts like ko, dc, j, r. Pick the right full spelling, then reply with Telex.
 
 **Family voices**
 - Record any word, sentence, or story line. The recording replaces the computer voice everywhere in the app, including listening exercises.
@@ -69,8 +76,11 @@ I study speech-language pathology, and I care about bilingual speakers. Many Vie
 | `js/ui.js` | The hedgehog drawn in SVG, unit scenery, tone graphs, story characters, speech, and synthesized sound effects. |
 | `js/pitch.js` | The tone mirror: microphone pitch tracking (YIN), smoothing, and shape scoring. |
 | `js/telex.js` | The Telex engine and the typing trainer. |
+| `js/talk.js` | Talk to family conversations. |
+| `js/chat.js` | Family chat: reading texts without accent marks and replying. |
 | `js/voices.js` | Family voices: recording (MediaRecorder), storage (IndexedDB), playback, and voice pack files. |
 | `css/styles.css` | All styling. The look comes from Đông Hồ folk woodblock prints: grainy điệp paper and the old pigments. Dark mode is based on sơn mài lacquer. |
+| `about.html` | The About page. |
 | `sw.js` | Offline support. |
 
 Key parts of `app.js`:

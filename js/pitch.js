@@ -130,9 +130,11 @@ function open(opts){
   attempts++;
   ref=ref==null?c.median:ref*.8+c.median*.2;try{localStorage.setItem(refKey,ref.toFixed(2))}catch(e){}
   draw(c.pts,false);
-  const r=score(tone,c.pts);
+  let r=score(tone,c.pts);
+  if(opts.south&&(tone.name==="hỏi"||tone.name==="ngã")){const other=tones.find(t=>t.name===(tone.name==="hỏi"?"ngã":"hỏi")),r2=score(other,c.pts);if(r2.stars>r.stars){r=r2;r.merged=other.name}}
   const msg=r.stars===3?"Chính xác!":r.stars===2?"Gần đúng rồi! Almost.":"Thử lại nhé. Try again.";
-  $("#mRes").innerHTML=`<div class="mstars" aria-label="${r.stars} of 3">${[1,2,3].map(i=>`<i class="${i<=r.stars?"on":""}">${I.star}</i>`).join("")}</div><b>${esc(msg)}</b><p class="muted">${esc(advice(tone,r))}</p>`;
+  const tip=r.merged&&r.stars===3?`That was the ${r.merged} shape. In the South, hỏi and ngã sound alike, so it counts.`:advice(tone,r);
+  $("#mRes").innerHTML=`<div class="mstars" aria-label="${r.stars} of 3">${[1,2,3].map(i=>`<i class="${i<=r.stars?"on":""}">${I.star}</i>`).join("")}</div><b>${esc(msg)}</b><p class="muted">${esc(tip)}</p>`;
   stat.textContent="Tap to try again.";
   opts.onScore&&opts.onScore(r.stars,tone.name);
  };

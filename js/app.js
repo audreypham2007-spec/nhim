@@ -19,6 +19,8 @@ const bare=s=>norm(s).normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/đ/g,"d")
 const TONE_MARK={"́":"sắc","̀":"huyền","̉":"hỏi","̃":"ngã","̣":"nặng"};
 function toneOf(w){const d=w.normalize("NFD");for(const m in TONE_MARK)if(d.includes(m))return TONE_MARK[m];return "ngang"}
 const toneByName=n=>TONES.find(t=>t.name===n);
+/* In the South, hỏi and ngã sound the same. In Southern mode either answer counts. */
+const southSame=(a,b)=>S.set.dialect==="S"&&a!==b&&["hỏi","ngã"].includes(a)&&["hỏi","ngã"].includes(b);
 const MIN=6e4,HOUR=36e5,DAY=864e5;
 
 /* ================= SAVED STATE ================= */
@@ -349,7 +351,7 @@ function openTelex(){
   onWrong:()=>fx("bad"),
   onEnd:(r,n)=>{addXp(Math.max(2,r));save()},
   onClose:()=>render()})}
-function openMirror(){PITCH.open({tones:TONES,say,esc,
+function openMirror(){PITCH.open({tones:TONES,say,esc,south:S.set.dialect==="S",
  wordsFor:name=>[...new Set(SINGLE.map(disp).filter(w=>toneOf(w)===name))],
  onScore:(stars,tn)=>{S.cnt.mirror=(S.cnt.mirror||0)+1;if(stars===3){addXp(2);fx("ok")}save()},
  onClose:()=>render()})}
@@ -481,18 +483,18 @@ function showQ(){progress();if(L.i>=L.q.length)return L.story?storyEnd():finish(
   <div class="opts ${q.grid||q.opts.every(o=>o.length<14)?"two":""}">${q.opts.map((o,k)=>optHtml(o,k)).join("")}</div>${q.tone?`<p class="hint">Look at the mark on the vowel. No mark means ngang.</p>`:""}`;
   b.innerHTML=h;if(q.audio&&!q.num)setTimeout(()=>say(q.audio),200);
   $$(".opt",b).forEach(o=>o.onclick=()=>{$$(".opt",b).forEach(x=>x.setAttribute("aria-pressed","false"));o.setAttribute("aria-pressed","true");sel=o.dataset.o;fx("tap");if(q.optAudio)say(sel);enable()});
-  ready=()=>sel!==null;check=()=>sel===q.ans}
+  ready=()=>sel!==null;check=()=>sel===q.ans||(q.tone&&southSame(sel,q.ans)&&(q.merged=true))}
  if(q.type==="shape"){const t=toneByName(q.ans);if(!q.opts.includes(q.ans)){q.opts[0]=q.ans;q.opts=shuffle(q.opts)}
   h+=`<div class="prompt">${mascot("think")}<div class="bubble">${speakerBtn(q.audio)}<span style="font-size:1.7rem">${esc(q.show)}</span></div></div>
   <div class="opts">${q.opts.map((n,k)=>`<button class="opt shape" data-o="${esc(n)}" aria-pressed="false" aria-label="Pitch shape ${k+1}"><span class="row" style="justify-content:space-between"><span class="k">${k+1}</span></span>${contour(toneByName(n),{w:300,h:70})}</button>`).join("")}</div>`;
   b.innerHTML=h;setTimeout(()=>say(q.audio),200);
   $$(".opt",b).forEach(o=>o.onclick=()=>{$$(".opt",b).forEach(x=>x.setAttribute("aria-pressed","false"));o.setAttribute("aria-pressed","true");sel=o.dataset.o;fx("tap");enable()});
-  ready=()=>sel!==null;check=()=>sel===q.ans;answerText=()=>q.ans+" ("+t.en+")"}
+  ready=()=>sel!==null;check=()=>sel===q.ans||(southSame(sel,q.ans)&&(q.merged=true));answerText=()=>q.ans+" ("+t.en+")"}
  if(q.type==="listen"){h+=`<div class="row" style="justify-content:center;gap:18px;padding:8px 0 4px">${speakerBtn(q.audio,"big")}<button class="spk mid" data-slow="${esc(q.audio)}" aria-label="Play slowly" style="background:var(--indigo);box-shadow:0 5px 0 color-mix(in srgb,var(--indigo) 60%,#000)">${I.slow}</button></div>
   <div class="opts two">${q.opts.map((o,k)=>optHtml(o,k)).join("")}</div>`;
   b.innerHTML=h;setTimeout(()=>say(q.audio),300);
   $$(".opt",b).forEach(o=>o.onclick=()=>{$$(".opt",b).forEach(x=>x.setAttribute("aria-pressed","false"));o.setAttribute("aria-pressed","true");sel=o.dataset.o;fx("tap");enable()});
-  ready=()=>sel!==null;check=()=>sel===q.ans}
+  ready=()=>sel!==null;check=()=>sel===q.ans||(q.it&&q.it.tonal&&southSame(toneOf(sel),toneOf(q.ans))&&(q.merged=true))}
  if(q.type==="match"){const left=shuffle(q.pairs.map(p=>p[0])),right=shuffle(q.pairs.map(p=>p[1]));
   h+=`<div class="opts two"><div class="opts">${left.map(x=>`<button class="opt" data-side="vi" data-v="${esc(x)}" aria-pressed="false">${esc(x)}</button>`).join("")}</div><div class="opts">${right.map(x=>`<button class="opt" data-side="en" data-v="${esc(x)}" aria-pressed="false">${esc(x)}</button>`).join("")}</div></div>`;
   b.innerHTML=h;let a=null,got=0,miss=0;
@@ -541,7 +543,7 @@ function grade(ok,ans,q,sel){L.answered++;const b=$("#lbody");
   if(q.it&&!q.it.tonal)srsHit(q.it,true);
   fx(L.combo>0&&L.combo%5===0?"combo":"ok");if(m){m.outerHTML=mascot("cheer","m-hop")}
   const praise=L.combo>=5?pick(["Đỉnh quá!","Không cản nổi!","Quá giỏi!"],1)[0]:pick(["Giỏi quá!","Tuyệt vời!","Đúng rồi!","Hay lắm!","Chính xác!"],1)[0];
-  const extra=q.slip?`<p>Watch the marks: <b>${esc(q.ans)}</b></p>`:q.type==="type"&&q.alts&&q.alts.length>1?`<p class="mean">Also right: ${esc(q.alts.filter(a=>norm(a)!==norm(q.ans)).join(", "))}</p>`:q.it&&q.it.en&&q.type!=="match"&&!q.it.tonal&&q.type!=="mc"?`<p class="mean">${esc(disp(q.it))} = ${esc(q.it.en)}</p>`:"";
+  const extra=q.merged?`<p>In the South, hỏi and ngã sound alike, so this counts. The spelling uses <b>${esc(q.tone||q.type==="shape"?q.ans:toneOf(q.ans))}</b>${q.tone||q.type==="shape"?"":": "+esc(q.ans)}.</p>`:q.slip?`<p>Watch the marks: <b>${esc(q.ans)}</b></p>`:q.type==="type"&&q.alts&&q.alts.length>1?`<p class="mean">Also right: ${esc(q.alts.filter(a=>norm(a)!==norm(q.ans)).join(", "))}</p>`:q.it&&q.it.en&&q.type!=="match"&&!q.it.tonal&&q.type!=="mc"?`<p class="mean">${esc(disp(q.it))} = ${esc(q.it.en)}</p>`:"";
   footer(`<div class="fb"><span class="badge">${I.check}</span><div><h3>${praise}</h3>${extra}</div></div><button class="btn" id="cont">Continue</button>`,"ok")}
  else{L.wrong++;L.combo=0;if(q.it&&!q.it.tonal)srsHit(q.it,false);
   fx("bad");if(m){m.outerHTML=mascot("sad","m-droop")}

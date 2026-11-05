@@ -485,3 +485,13 @@ kbd.big{font-size:1.2rem}
 .irow{display:flex;align-items:center;gap:14px;margin-top:10px}
 .irow .micbtn{width:60px;height:60px}
 .irow .micbtn svg{width:26px;height:26px}
+
+/* ---------- family chat ---------- */
+.cphone{background:var(--paper);border:2px solid var(--rule);border-radius:var(--r-l);padding:14px;margin:12px 0;box-shadow:0 4px 0 var(--rule)}
+.cmsg{display:flex;gap:10px;align-items:flex-end}
+.cmsg .ava{width:40px;height:40px;flex:none}
+.cfrom{font-size:.78rem;font-weight:800;color:var(--ink-2)}
+.cbub{background:var(--page);border-radius:18px 18px 18px 4px;padding:9px 14px;font-size:1.15rem;margin-top:2px;display:inline-block}
+.cme{display:flex;justify-content:flex-end;min-height:0;padding:10px 14px}
+.cme:empty{display:none}
+.cbub.me{background:var(--leaf);color:#fff;border-radius:18px 18px 4px 18px}

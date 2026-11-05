@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nhím: Learn Vietnamese</title>
+<meta name="description" content="Learn Vietnamese in short, game-like lessons. Six tones, 16 units, stories, and both Northern and Southern words. Made by Audrey Pham.">
+<meta name="author" content="Audrey Pham">
+<meta name="theme-color" content="#EDF2EA">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Nhím: Learn Vietnamese">
+<meta property="og:description" content="Tones first, family words early, and the Vietnamese your family speaks.">
+<meta property="og:image" content="https://audreypham2007-spec.github.io/nhim/preview.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap&subset=vietnamese">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div class="shell">
+  <nav class="rail" id="rail" aria-label="Sections"></nav>
+  <div class="col">
+    <header class="topbar">
+      <a class="brand" id="brandTop" href="#" aria-label="Nhím home"></a>
+      <div class="stats">
+        <button class="stat c-streak" id="stStreak"></button>
+        <button class="stat c-xp" id="stXp"></button>
+        <button class="stat c-heart" id="stHearts"></button>
+      </div>
+    </header>
+    <main id="view"></main>
+  </div>
+  <aside class="aside" id="aside" aria-label="Streak and quests"></aside>
+</div>
+<nav class="tabs" id="tabs" aria-label="Sections"></nav>
+<div id="layer"></div>
+<noscript><p style="padding:20px">Nhím needs JavaScript to run.</p></noscript>
+<script src="js/data.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

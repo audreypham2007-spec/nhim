@@ -449,7 +449,7 @@ kbd.big{font-size:1.2rem}
 
 /* ---------- woodblock details ---------- */
 /* printed edge: a hard ink outline and a slightly offset "second pass" shadow, like a block printed in two colors */
-.panel,.hubcard,.scard .cover,.hello .speech,.treeout,.mgraph,.tcheat{box-shadow:3px 4px 0 var(--rule)}
+.panel,.hubcard,.scard .cover,.hello .speech,.treeout,.mgraph,.tcheat{box-shadow:0 4px 0 var(--rule)}
 .ubanner{border:2.5px solid color-mix(in srgb,var(--u) 55%,#1F1A15)}
 .ubanner.locked{border-color:var(--locked-deep)}
 /* a row of carved diamonds along the bottom of each unit banner */

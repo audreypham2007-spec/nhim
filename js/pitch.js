@@ -2,7 +2,7 @@
    Runs fully in the browser. Pitch is found with a small YIN detector on the microphone signal.
    Nothing is recorded or sent anywhere. */
 (function(){
-const W=320,H=150,PAD=10,REC_MS=2000,SILENCE_MS=380,ST_PER_LEVEL=2.4;
+const W=320,H=150,PAD=8,REC_MS=2000,SILENCE_MS=380,ST_PER_LEVEL=2.4;
 const X=x=>PAD+x*(W-2*PAD),Y=y=>H-PAD-(Math.max(.6,Math.min(5.4,y))-1)/4*(H-2*PAD);
 let ctx=null,stream=null,an=null,buf=null;
 

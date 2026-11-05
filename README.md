@@ -8,20 +8,22 @@ Made by Audrey Pham, Communication Sciences and Disorders, California State Univ
 
 <p>
   <img src="screenshots/path.png" width="200" alt="Learning path with Nhím next to the current lesson">
-  <img src="screenshots/tones.png" width="200" alt="Tone exercise: match the word to its pitch shape">
+  <img src="screenshots/tones.png" width="200" alt="Tone mirror: the learner's pitch line drawn over the target tone">
   <img src="screenshots/story.png" width="200" alt="A story with tap-to-translate words and a comprehension question">
   <img src="screenshots/family.png" width="200" alt="Interactive family tree for Vietnamese pronouns">
+  <img src="screenshots/telex.png" width="200" alt="Telex typing practice turning vieetj into việt">
 </p>
 
 ## Why I built this
 
-Vietnamese has six tones. A change in pitch changes the word: ma (ghost), má (mother), mà (but), mả (grave), mã (horse), mạ (rice seedling). Most apps treat tones as a footnote. Nhím teaches them first and draws each one as a pitch line, so you see what your voice should do.
+Vietnamese has six tones. A change in pitch changes the word: ma (ghost), má (mother), mà (but), mả (grave), mã (horse), mạ (rice seedling). Most apps treat tones as a footnote. Nhím teaches them first and draws each one as a pitch line, so you see what your voice should do. Then you say the word into your microphone and see your own pitch line on top.
 
 I study speech-language pathology, and I care about bilingual speakers. Many Vietnamese American students understand Vietnamese at home but can't read or write it. Nhím is built for them:
 
 - It accepts both Northern and Southern words (vâng/dạ, bố/ba, mẹ/má, đắt/mắc) and shows the learner's home dialect first.
 - It teaches family pronouns early, with a tap-through family tree, because "I" and "you" depend on who you're talking to.
 - Heritage speakers can skip ahead during setup.
+- It teaches Telex typing, because many heritage speakers can speak Vietnamese but have never typed it.
 
 ## Features
 
@@ -32,12 +34,14 @@ I study speech-language pathology, and I care about bilingual speakers. Many Vie
 
 **Tone tools**
 - Each tone drawn as a pitch contour on a 5-level scale. A dot traces the line while the word plays.
+- Tone mirror: say a word into the microphone and see your pitch line next to the target. It scores the shape of the line, not how high your voice is, and gives a tip for each tone. It runs in the browser. Nothing is recorded or saved.
 - A tone gym, and a tone mix-up chart in your profile that shows which tones you confuse with which.
 
 **Practice**
 - Spaced repetition: each word has a strength from 0 to 5 and comes back 10 minutes, 1 day, 3 days, 1 week, 2 weeks, or a month later.
 - A mistakes list that clears a word once you get it right twice.
 - A number trainer for 0 to 999 that covers mốt, lăm, tư, and linh or lẻ.
+- Telex typing practice with a built-in Telex engine (aa → â, dd → đ, s → sắc), so it works on any keyboard.
 
 **Motivation**
 - XP, daily goal, and day streak. No hearts: mistakes never lock you out, they come back at the end of the lesson until you get them right.
@@ -57,7 +61,9 @@ I study speech-language pathology, and I care about bilingual speakers. Many Vie
 | `js/data.js` | All course content: tones with pitch contours, units, fill-in items, and stories. |
 | `js/app.js` | State, the lesson path, exercise builders, grading, spaced repetition, quests, badges, and every screen. |
 | `js/ui.js` | The hedgehog drawn in SVG, unit scenery, tone graphs, story characters, speech, and synthesized sound effects. |
-| `css/styles.css` | All styling. The palette comes from Đông Hồ folk woodblock prints. |
+| `js/pitch.js` | The tone mirror: microphone pitch tracking (YIN), smoothing, and shape scoring. |
+| `js/telex.js` | The Telex engine and the typing trainer. |
+| `css/styles.css` | All styling. The look comes from Đông Hồ folk woodblock prints: grainy điệp paper and the old pigments. Dark mode is based on sơn mài lacquer. |
 | `sw.js` | Offline support. |
 
 Key parts of `app.js`:
@@ -69,15 +75,16 @@ Key parts of `app.js`:
 
 ## Tech
 
-HTML, CSS, and vanilla JavaScript. No framework, no build step, no server, no tracking. Audio uses the browser's Vietnamese voice (Web Speech API). Sound effects use the Web Audio API. Progress saves in the browser (localStorage). Hosted on GitHub Pages.
+HTML, CSS, and vanilla JavaScript. No framework, no build step, no server, no tracking. Audio uses the browser's Vietnamese voice (Web Speech API). Sound effects and the tone mirror use the Web Audio API. Progress saves in the browser (localStorage). Hosted on GitHub Pages.
 
 ## Run it on your computer
 
 Download the repository and open `index.html` in a browser.
 
+The tone mirror needs microphone access, which some browsers only allow from a web server. In the project folder, run `python -m http.server 8000` and open http://localhost:8000.
+
 ## Roadmap
 
-- Pitch tracker: say a word into the microphone and see your pitch next to the target tone.
 - Recordings from native speakers in place of the browser voice.
 - A study with Vietnamese American heritage speakers: a tone listening test before and after 4 weeks of use.
 

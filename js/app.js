@@ -288,11 +288,16 @@ function renderPractice(v){
   <button class="hubcard" data-p="mistakes" style="--hc:var(--lotus)"><span class="ic">${I.redo}</span><h3>Mistakes</h3><p>Every word you missed, until you get it right twice.</p><span class="count">${miss} ${miss===1?"word":"words"}</span></button>
   <button class="hubcard" data-p="tones" style="--hc:var(--indigo)"><span class="ic">${I.wave}</span><h3>Tone gym</h3><p>Name the tone and match the pitch shape.</p><span class="count">${ts[1]?Math.round(ts[0]/ts[1]*100)+"% right so far":"Not started"}</span></button>
   <button class="hubcard" data-p="numbers" style="--hc:var(--gold-deep)"><span class="ic">${I.hash}</span><h3>Numbers</h3><p>0 to 999, with mốt, lăm, tư, and linh or lẻ.</p><span class="count">10 questions</span></button>
+  ${window.PITCH&&PITCH.supported()?`<button class="hubcard wide" data-mirror style="--hc:var(--lotus)"><span class="ic">${I.mic}</span><span style="flex:1"><h3>Tone mirror</h3><p>Say a word into your mic and see your pitch line next to the real tone.</p></span><span class="count">${S.cnt.mirror?S.cnt.mirror+" tries":"New"}</span></button>`:""}
   ${UI.hasVoice()?`<button class="hubcard" data-p="listening" style="--hc:#2C7A7B"><span class="ic">${I.ear}</span><h3>Listening</h3><p>Ears only. Hear it, pick it or type it.</p><span class="count">10 questions</span></button>`:""}
  </div>
  <section class="panel"><div class="spread"><h2>Word strength</h2><span class="muted small">${learnedCount()} ${learnedCount()===1?"word":"words"} learned</span></div>
  ${weak.length?`<div class="vlist">${weak.map(({it,r})=>`<div><span><b>${esc(disp(it))}</b><br><span class="muted small">${esc(it.en)}</span></span><span class="row" style="gap:10px"><span class="strength" aria-label="Strength ${r.s} of 5">${[1,2,3,4,5].map(i=>`<i class="${r.s>=i?"on":""}"></i>`).join("")}</span><button class="mini" data-say="${esc(disp(it))}" aria-label="Play">${I.sound}</button></span></div>`).join("")}</div>`:`<p class="muted">Finish a lesson and your words show up here, weakest first.</p>`}</section>`;
- $$("[data-p]",v).forEach(b=>b.onclick=()=>startPractice(b.dataset.p))}
+ $$("[data-p]",v).forEach(b=>b.onclick=()=>startPractice(b.dataset.p));const mb=$("[data-mirror]",v);if(mb)mb.onclick=openMirror}
+function openMirror(){PITCH.open({tones:TONES,say,esc,
+ wordsFor:name=>[...new Set(SINGLE.map(disp).filter(w=>toneOf(w)===name))],
+ onScore:(stars,tn)=>{S.cnt.mirror=(S.cnt.mirror||0)+1;if(stars===3){addXp(2);fx("ok")}save()},
+ onClose:()=>render()})}
 function startPractice(kind){const q=buildPractice(kind);if(!q.length)return toast(I.x,"Nothing to practice yet.");startLesson("practice",kind,q)}
 
 /* ----- stories list ----- */
@@ -598,6 +603,6 @@ if(!S.onb)onboarding();
 setTimeout(()=>{UI.findVoice();if(!L&&(tab==="guide"||tab==="practice"))render()},900);
 if("speechSynthesis" in window)speechSynthesis.addEventListener?.("voiceschanged",()=>{if(!L&&tab==="guide")render()});
 setInterval(()=>{if(!L){const h=S.hearts;regen();if(h!==S.hearts){save();topStats()}}},60000);
-if("serviceWorker" in navigator&&location.protocol.startsWith("http"))navigator.serviceWorker.register("sw.js").catch(()=>{});
+if("serviceWorker" in navigator&&location.protocol.startsWith("http")&&location.hostname!=="localhost")navigator.serviceWorker.register("sw.js").catch(()=>{});
 window.__nhim={get S(){return S},get L(){return L},startLesson,buildLesson,ORDER,numVi,showQ,grade};
 })();

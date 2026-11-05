@@ -321,11 +321,14 @@ const FAMILY=[
  {id:"di",x:92,y:40,c:"var(--lotus)",lab:"Mom's sister",call:"dì",self:"cháu",note:"In the South, people often call a mom's older sister dì too."},
  {id:"anh",x:26,y:74,c:"var(--gold-deep)",lab:"Older brother",call:"anh",self:"em",note:"Anh also means 'you' for any young man a bit older than you."},
  {id:"chi",x:42,y:74,c:"var(--gold-deep)",lab:"Older sister",call:"chị",self:"em",note:"Chị also means 'you' for any young woman a bit older than you."},
- {id:"me0",x:58,y:74,c:"var(--lotus)",lab:"You",me:true},
+ {id:"me0",x:58,y:74,c:"var(--lotus)",lab:"You (mình)",me:true},
  {id:"em",x:74,y:74,c:"var(--gold-deep)",lab:"Younger sibling",call:"em",self:"anh / chị",note:"You call yourself anh if you're male, chị if you're female."}];
-function familyTree(){const P=id=>FAMILY.find(f=>f.id===id),ln=(a,b)=>{const A=P(a),B=P(b);return `<path d="M${A.x} ${A.y+6}V${(A.y+B.y)/2+3}H${B.x}V${B.y-6}" fill="none" stroke="var(--rule-2)" stroke-width=".6"/>`};
- return `<div class="tree"><svg class="lines" viewBox="0 0 100 82" preserveAspectRatio="none" aria-hidden="true">${[["ongn","bo"],["ban","bac"],["ban","chu"],["ban","co"],["ongng","me"],["bang","cau"],["bang","di"],["bo","anh"],["bo","chi"],["me","me0"],["me","em"]].map(([a,b])=>ln(a,b)).join("")}</svg>
- ${FAMILY.map(f=>`<button class="p ${f.me?"me":""}" style="left:${f.x}%;top:${f.y/0.82}%;--pc:${f.c}" data-fam="${f.id}" aria-pressed="false"><span class="face">${f.me?"Bạn":esc(f.call.split(" / ")[0].split(" ")[0])}</span><span class="pl">${esc(f.lab)}</span></button>`).join("")}</div>
+function familyTree(){const P=id=>FAMILY.find(f=>f.id===id),st='fill="none" stroke="var(--rule-2)" stroke-width=".6"';
+ /* each family: parents joined by a marriage line, one drop from its middle, a bus, then one line to each child */
+ const fam=(pa,kids)=>{const A=P(pa[0]),B=P(pa[1]),mx=(A.x+B.x)/2,K=kids.map(P),bus=(A.y+K[0].y)/2+3,xs=K.map(k=>k.x).concat(mx);
+  return `<path d="M${A.x} ${A.y}H${B.x}" ${st}/><path d="M${mx} ${A.y}V${bus}" ${st}/><path d="M${Math.min(...xs)} ${bus}H${Math.max(...xs)}" ${st}/>`+K.map(k=>`<path d="M${k.x} ${bus}V${k.y-6}" ${st}/>`).join("")};
+ return `<div class="tree"><svg class="lines" viewBox="0 0 100 82" preserveAspectRatio="none" aria-hidden="true">${fam(["ongn","ban"],["bac","chu","co","bo"])}${fam(["ongng","bang"],["me","cau","di"])}${fam(["bo","me"],["anh","chi","me0","em"])}</svg>
+ ${FAMILY.map(f=>`<button class="p ${f.me?"me":""}" style="left:${f.x}%;top:${f.y/0.82}%;--pc:${f.c}" data-fam="${f.id}" aria-pressed="false"><span class="face">${f.me?"Mình":esc(f.call.split(" / ")[0].split(" ")[0])}</span><span class="pl">${esc(f.lab)}</span></button>`).join("")}</div>
  <div class="treeout" id="treeout" aria-live="polite"><p class="muted">Tap a relative. You'll see what you call them and what you call yourself when you talk to them.</p></div>`}
 function bindTree(r){$$("[data-fam]",r).forEach(b=>b.onclick=()=>{const f=FAMILY.find(x=>x.id===b.dataset.fam);$$("[data-fam]",r).forEach(x=>x.setAttribute("aria-pressed","false"));b.setAttribute("aria-pressed","true");
  const o=$("#treeout",r);if(f.me){o.innerHTML=`<p>That's you. Vietnamese has no single word for "I" and "you". You pick both from the family words, based on who you're talking to.</p>`;return}

@@ -288,18 +288,23 @@ function tipSheet(ui){
 function renderPractice(v){
  const due=dueItems().length,miss=Object.keys(S.miss).length,ts=Object.values(S.tstat).reduce((a,t)=>[a[0]+t.r,a[1]+t.r+t.w],[0,0]);
  const weak=Object.entries(S.srs).sort((a,b)=>a[1].s-b[1].s).slice(0,24).map(([vi,r])=>({it:WORD_BY_VI.get(norm(vi)),r})).filter(x=>x.it);
- v.innerHTML=`<header><h1 style="font-size:2rem">Practice</h1><p class="muted">Short sessions that keep your words fresh. Mistakes never lock you out. They just come back until you get them.</p></header>
- <div class="hub">
-  <button class="hubcard wide" data-p="review" style="--hc:var(--leaf)"><span class="ic">${I.brain}</span><span style="flex:1"><h3>Smart review</h3><p>Words come back right before you'd forget them.</p></span><span class="count">${due?due+" due":"All fresh"}</span></button>
-  <button class="hubcard" data-p="mistakes" style="--hc:var(--lotus)"><span class="ic">${I.redo}</span><h3>Mistakes</h3><p>Every word you missed, until you get it right twice.</p><span class="count">${miss} ${miss===1?"word":"words"}</span></button>
-  <button class="hubcard" data-p="tones" style="--hc:var(--indigo)"><span class="ic">${I.wave}</span><h3>Tone gym</h3><p>Name the tone and match the pitch shape.</p><span class="count">${ts[1]?Math.round(ts[0]/ts[1]*100)+"% right so far":"Not started"}</span></button>
-  <button class="hubcard" data-p="numbers" style="--hc:var(--gold-deep)"><span class="ic">${I.hash}</span><h3>Numbers</h3><p>0 to 999, with mốt, lăm, tư, and linh or lẻ.</p><span class="count">10 questions</span></button>
-  ${window.PITCH&&PITCH.supported()?`<button class="hubcard wide" data-mirror style="--hc:var(--lotus)"><span class="ic">${I.mic}</span><span style="flex:1"><h3>Tone mirror</h3><p>Say a word into your mic and see your pitch line next to the real tone.</p></span><span class="count">${S.cnt.mirror?S.cnt.mirror+" tries":"New"}</span></button>`:""}
-  <button class="hubcard" data-chat style="--hc:var(--leaf)"><span class="ic">${I.chat}</span><h3>Family chat</h3><p>Read texts with no accent marks ("con an com chua") and reply.</p><span class="count">${S.cnt.chats?S.cnt.chats+" done":"New"}</span></button>
-  <button class="hubcard" data-telex style="--hc:var(--indigo)"><span class="ic">${I.keyb}</span><h3>Type Vietnamese</h3><p>Learn Telex: aa is â, dd is đ, s adds a rising tone.</p><span class="count">${S.cnt.typed?S.cnt.typed+" typed":"10 words"}</span></button>
-  <button class="hubcard wide" data-voices style="--hc:var(--gold-deep)"><span class="ic">${I.family}</span><span style="flex:1"><h3>Family voices</h3><p>Ask Bà, Ông, Má or Ba to record words. Nhím plays their voice instead of the computer's.</p></span><span class="count">${famCount()?famCount()+" recorded":"New"}</span></button>
-  ${UI.hasVoice()||famCount()>=8?`<button class="hubcard" data-p="listening" style="--hc:#2C7A7B"><span class="ic">${I.ear}</span><h3>Listening</h3><p>Ears only. Hear it, pick it or type it.</p><span class="count">10 questions</span></button>`:""}
- </div>
+ const tile=(attr,col,ic,title,desc,count)=>`<button class="ptile" ${attr} style="--hc:${col}"><span class="ic">${ic}</span><span class="pt"><b>${title}</b><span>${desc}</span></span><span class="pill">${count}</span></button>`;
+ const sec=(vi,en,ic,body)=>`<section class="psec"><h2 class="psh"><span class="psi">${ic}</span><span>${vi}<small>${en}</small></span></h2><div class="pgrid">${body}</div></section>`;
+ const mirrorOK=window.PITCH&&PITCH.supported(),listenCard=UI.hasVoice()||famCount()>=8;
+ v.innerHTML=`<header><h1 style="font-size:2rem">Practice</h1><p class="muted">Pick anything. Mistakes never lock you out. They just come back until you get them.</p></header>
+ <button class="phero" data-p="review"><span class="phero-t"><span class="kick">Today's review</span><b>${due?`${due} ${due===1?"word is":"words are"} fading`:"All your words are fresh"}</b><span>${due?"A 3-minute review brings them back right before you'd forget them.":"Do a quick review anyway, or try something below."}</span><span class="btn gold slim">${due?"Start review":"Review anyway"}</span></span>${mascot(due?"think":"cheer")}</button>
+ ${sec("Ôn lại","Review",I.brain,
+   tile('data-p="mistakes"',"var(--lotus)",I.redo,"Mistakes","Words you missed",`${miss}`)+
+   tile('data-p="numbers"',"var(--gold-deep)",I.hash,"Numbers","0 to 999","10 Qs")+
+   (listenCard?tile('data-p="listening"',"#2C7A7B",I.ear,"Listening","Ears only","10 Qs"):""))}
+ ${sec("Nói","Speak",I.mic,
+   (mirrorOK?tile("data-mirror","var(--lotus)",I.mic,"Tone mirror","See your pitch",S.cnt.mirror?`${S.cnt.mirror} tries`:"New"):"")+
+   tile('data-p="tones"',"var(--indigo)",I.wave,"Tone gym","Hear and match tones",ts[1]?`${Math.round(ts[0]/ts[1]*100)}%`:"New"))}
+ ${sec("Đọc và viết","Read and write",I.keyb,
+   tile("data-chat","var(--leaf)",I.chat,"Family chat",'Read "con an com chua"',S.cnt.chats?`${S.cnt.chats} done`:"New")+
+   tile("data-telex","var(--indigo)",I.keyb,"Type Vietnamese","Telex: aa → â",S.cnt.typed?`${S.cnt.typed} typed`:"New"))}
+ ${sec("Gia đình","Family",I.family,
+   `<button class="pfam" data-voices><span class="ic">${I.family}</span><span class="pt"><b>Family voices</b><span>Have Bà, Ông, Má or Ba record words. Nhím plays their voice.</span></span><span class="pill">${famCount()?famCount()+" recorded":"Start"}</span></button>`)}
  <section class="panel"><div class="spread"><h2>Word strength</h2><span class="muted small">${learnedCount()} ${learnedCount()===1?"word":"words"} learned</span></div>
  ${weak.length?`<div class="vlist">${weak.map(({it,r})=>`<div><span><b>${esc(disp(it))}</b><br><span class="muted small">${esc(it.en)}</span></span><span class="row" style="gap:10px"><span class="strength" aria-label="Strength ${r.s} of 5">${[1,2,3,4,5].map(i=>`<i class="${r.s>=i?"on":""}"></i>`).join("")}</span><button class="mini" data-say="${esc(disp(it))}" aria-label="Play">${I.sound}</button></span></div>`).join("")}</div>`:`<p class="muted">Finish a lesson and your words show up here, weakest first.</p>`}</section>`;
  $$("[data-p]",v).forEach(b=>b.onclick=()=>startPractice(b.dataset.p));const mb=$("[data-mirror]",v);if(mb)mb.onclick=openMirror;$("[data-telex]",v).onclick=openTelex;$("[data-voices]",v).onclick=()=>openVoices();$("[data-chat]",v).onclick=()=>CHAT.open({esc,say,onAnswer:ok=>fx(ok?"ok":"bad"),onEnd:r=>{S.cnt.chats=(S.cnt.chats||0)+1;addXp(Math.max(2,r));questProg("practice",1);save()},onClose:()=>render()})}
@@ -649,15 +654,14 @@ function streakSheet(){sheet(`<div class="streakbig" style="color:var(--gold)">$
 function onboarding(){let step=0;const o=document.createElement("div");o.className="onb";document.body.appendChild(o);
  const pickRow=(id,ic,b,s,on)=>`<button class="pickcard" data-pick="${id}" aria-pressed="${on}"><span class="ic">${ic}</span><span><b>${b}</b><span>${s}</span></span></button>`;
  let level="new";
- const draw=()=>{const dots=`<div class="dots">${[0,1,2,3,4].map(i=>`<i class="${i===step?"on":""}"></i>`).join("")}</div>`;
+ const draw=()=>{const dots=`<div class="dots">${[0,1,2,3].map(i=>`<i class="${i===step?"on":""}"></i>`).join("")}</div>`;
   if(step===0)o.innerHTML=`<div class="in"><div class="hero">${mascot("happy","bob")}<h1>Nhím</h1><p style="font-size:1.15rem">Learn Vietnamese in a few minutes a day. Tones first, family words early, and the Vietnamese your family speaks.</p></div><button class="btn" id="nx">Get started</button>${dots}</div>`;
   if(step===1)o.innerHTML=`<div class="in"><h2>Which Vietnamese do you hear at home?</h2><p class="muted">Nhím shows these words first. Both are always accepted.</p>${pickRow("S","N","Southern","Sài Gòn, the Mekong Delta, and most Viet families in Orange County",S.set.dialect==="S")}${pickRow("N","B","Northern","Hà Nội and the North",S.set.dialect==="N")}<button class="btn" id="nx">Continue</button>${dots}</div>`;
   if(step===2)o.innerHTML=`<div class="in"><h2>How much Vietnamese do you know?</h2>${pickRow("new","1","I'm new","Start from the six tones",level==="new")}${pickRow("some","2","I understand some, but can't read it","Skip ahead to Unit 3",level==="some")}${pickRow("more","3","I can read a little","Skip ahead to Unit 5",level==="more")}<button class="btn" id="nx">Continue</button>${dots}</div>`;
-  if(step===3)o.innerHTML=`<div class="in"><h2>What do you want most?</h2><p class="muted">Nhím mixes in more of what you pick. You get everything either way.</p>${pickRow("speak",I.mic,"Speak with my family","More saying words out loud and listening",S.focus==="speak")}${pickRow("read",I.keyb,"Read and write","More typing and spelling",S.focus==="read")}${pickRow("all",I.star,"A bit of everything","An even mix",(S.focus||"all")==="all")}<button class="btn" id="nx">Continue</button>${dots}</div>`;
-  if(step===4)o.innerHTML=`<div class="in"><h2>Pick a daily goal</h2><p class="muted">A lesson is about 10 XP and 3 to 5 minutes.</p>${[[10,"Casual","1 lesson a day"],[20,"Regular","2 lessons a day"],[30,"Serious","3 lessons a day"],[50,"Intense","5 lessons a day"]].map(([n,b,s])=>pickRow(n,n,b,s,S.goal===n)).join("")}<button class="btn" id="nx">Start learning</button>${dots}</div>`;
+  if(step===3)o.innerHTML=`<div class="in"><h2>What do you want most?</h2><p class="muted">Nhím mixes in more of what you pick. You get everything either way.</p>${pickRow("speak",I.mic,"Speak with my family","More saying words out loud and listening",S.focus==="speak")}${pickRow("read",I.keyb,"Read and write","More typing and spelling",S.focus==="read")}${pickRow("all",I.star,"A bit of everything","An even mix",(S.focus||"all")==="all")}<button class="btn" id="nx">Start learning</button>${dots}</div>`;
   $$("[data-pick]",o).forEach(b=>b.onclick=()=>{$$("[data-pick]",o).forEach(x=>x.setAttribute("aria-pressed","false"));b.setAttribute("aria-pressed","true");const v=b.dataset.pick;
-   if(step===1)S.set.dialect=v;if(step===2)level=v;if(step===3)S.focus=v;if(step===4)S.goal=+v;fx("tap")});
-  $("#nx",o).onclick=()=>{if(step<4){step++;draw();return}
+   if(step===1)S.set.dialect=v;if(step===2)level=v;if(step===3)S.focus=v;fx("tap")});
+  $("#nx",o).onclick=()=>{if(step<3){step++;draw();return}
    if(level!=="new"){const upto=level==="some"?2:4;ORDER.forEach(k=>{const u=+k.split(":")[0];if(u<upto)S.done[k]=1})}
    S.onb=true;save();o.remove();render();if(level!=="new")toast(I.star,`Unit ${level==="some"?3:5} is open. Earlier units stay open for review.`)}};
  draw()}
